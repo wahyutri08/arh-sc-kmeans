@@ -6,37 +6,43 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-$jumlahDataPerHalaman = 10;
-$jumlahData = count(query("SELECT * FROM atribut"));
-$jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+// $jumlahDataPerHalaman = 10;
+// if (isset($_POST["keyword"])) {
+//     $keyword = $_POST["keyword"];
+// } else {
+//     $keyword = '';
+// }
 
-if (isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 && $_GET["page"] <= $jumlahHalaman) {
-    $halamanAktif = (int)$_GET["page"];
-} else {
-    $halamanAktif = 1;
-}
+// // Cek apakah ada pencarian
+// if (!empty($keyword)) {
+//     $jumlahData = count(query("SELECT * FROM atribut WHERE 
+//             id_atribut LIKE '%$keyword%' OR
+//             nama_atribut LIKE '%$keyword%'"));
+// } else {
+//     $jumlahData = count(query("SELECT * FROM atribut"));
+// }
 
-$jumlahNavigasi = 5; // Jumlah halaman navigasi yang ingin ditampilkan
-$startPage = max(1, $halamanAktif - floor($jumlahNavigasi / 2)); // Halaman awal navigasi
-$endPage = min($jumlahHalaman, $halamanAktif + floor($jumlahNavigasi / 2)); // Halaman akhir navigasi
+// // Hitung halaman
+// $jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
 
-// Jika halaman awal terlalu kecil, sesuaikan halaman akhir
-if ($startPage == 1) {
-    $endPage = min($jumlahHalaman, $startPage + $jumlahNavigasi - 1);
-}
+// if (isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 && $_GET["page"] <= $jumlahHalaman) {
+//     $halamanAktif = (int)$_GET["page"];
+// } else {
+//     $halamanAktif = 1;
+// }
 
-// Jika halaman akhir terlalu besar, sesuaikan halaman awal
-if ($endPage == $jumlahHalaman) {
-    $startPage = max(1, $jumlahHalaman - $jumlahNavigasi + 1);
-}
+// $startData = ($halamanAktif - 1) * $jumlahDataPerHalaman;
 
-$startData = ($halamanAktif - 1) * $jumlahDataPerHalaman;
-$atr = query("SELECT * FROM atribut LIMIT $startData, $jumlahDataPerHalaman");
-
-if (isset($_POST["search"])) {
-    $atr = searchAtribut($_POST["keyword"]);
-}
-
+// // Query ambil data
+// if (!empty($keyword)) {
+//     $atr = query("SELECT * FROM atribut WHERE 
+//              id_atribut LIKE '%$keyword%' OR
+//             nama_atribut LIKE '%$keyword%'
+//             LIMIT $startData, $jumlahDataPerHalaman");
+// } else {
+//     $atr = query("SELECT * FROM atribut LIMIT $startData, $jumlahDataPerHalaman");
+// }
+$atr = query("SELECT * FROM atribut");
 
 ?>
 <!DOCTYPE html>
@@ -53,14 +59,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -98,24 +109,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col">
-                            <div class="card card-outline card-primary">
+                            <div class="card card-outline card-danger">
                                 <div class="card-header">
-                                    <h3 class="card-title"><a href="add_atribut.php" class="btn btn-sm btn-block bg-gradient-primary"><i class="fas fa-plus"></i> Tambah Data</a></h3>
-                                    <div class="card-tools mt-1">
-                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                    <h3 class="card-title"><a href="add_atribut.php" class="btn btn-sm btn-block bg-gradient-danger"><i class="fas fa-plus"></i> Tambah Data</a></h3>
+                                    <!-- <div class="card-tools mt-1">
+                                        <form action="" method="POST">
+                                            <div class="input-group input-group-sm" style="width: 150px;">
+                                                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="Search">
 
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-default">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-default">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </form>
+                                    </div> -->
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0">
-                                    <table class="table table-head-fixed text-nowrap">
+                                <div class="card-body">
+                                    <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
@@ -123,39 +136,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <?php if ($atr): ?>
+                                        <tbody>
                                             <?php foreach ($atr as $atribut) : ?>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-center"><?= $atribut["id_atribut"]; ?></td>
-                                                        <td class="text-center"><?= $atribut["nama_atribut"]; ?></td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                                    <li><a class="dropdown-item" href="edit_siswa.php?id_siswa=<?= $siswa["id_siswa"]; ?>">Edit</a></li>
-                                                                    <li><a class="dropdown-item tombol-hapus" href="delete_siswa.php?id_siswa=<?= $siswa["id_siswa"]; ?>">Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                <tr>
+                                                    <td class="text-center"><?= $atribut["id_atribut"]; ?></td>
+                                                    <td><?= $atribut["nama_atribut"]; ?></td>
+                                                    <td class="text-center">
+                                                        <div class="dropdown">
+                                                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                                <li><a class="dropdown-item" href="edit_atribut.php?id_atribut=<?= $atribut["id_atribut"]; ?>"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                <li><a class="dropdown-item tombol-hapus" href="delete_atribut.php?id_atribut=<?= $atribut["id_atribut"]; ?>"><i class="far fa-trash-alt"></i> Delete</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
                                             <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr>
-                                                <td class="text-center" colspan="6">No data found</td>
-                                            </tr>
-                                        <?php endif; ?>
+                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
-                                <div class="card-footer clearfix">
+                                <!-- <div class="card-footer clearfix">
                                     <div class="showing-entries">
                                         <span id="showing-entries">Showing <?= ($startData + 1); ?> to <?= min($startData + $jumlahDataPerHalaman, $jumlahData); ?> of <?= $jumlahData; ?> entries</span>
                                         <ul class="pagination pagination-sm m-0 float-right">
-                                            <!-- Tombol Previous -->
+                                      
                                             <li class="page-item">
                                                 <a class="page-link" href="?page=<?= max(1, $halamanAktif - 1); ?>">Previous</a>
                                             </li>
@@ -182,7 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- /.card -->
                         </div>
@@ -213,8 +221,102 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../assets/plugins/jszip/jszip.min.js"></script>
+    <script src="../assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
+    <!-- Sweetalert -->
+    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script>
+        $(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.tombol-hapus').on('click', function(e) {
+                e.preventDefault();
+                const href = $(this).attr('href');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Data Will Be Deleted",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: href,
+                            type: 'GET',
+                            success: function(response) {
+                                let res = JSON.parse(response);
+                                if (res.status === 'success') {
+                                    Swal.fire({
+                                        title: 'Deleted!',
+                                        text: 'Data Successfully Deleted',
+                                        icon: 'success',
+                                        showConfirmButton: true,
+                                    }).then(() => {
+                                        window.location.href = '../atribut';
+                                    });
+                                } else if (res.status === 'error') {
+                                    Swal.fire('Error', 'Data Deletion Failed', 'error');
+                                } else if (res.status === 'redirect') {
+                                    window.location.href = '../login';
+                                }
+                            },
+                            error: function() {
+                                Swal.fire('Error', 'An Error Occurred on the Server', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            function updateShowingEntries(jumlahData, jumlahDataPerHalaman, halamanSekarang) {
+                if (jumlahData === 0) {
+                    $('#showing-entries').html('Showing 0 entries');
+                } else {
+                    var startEntry = (halamanSekarang - 1) * jumlahDataPerHalaman + 1;
+                    var endEntry = Math.min(halamanSekarang * jumlahDataPerHalaman, jumlahData);
+                    $('#showing-entries').html('Showing ' + startEntry + ' to ' + endEntry + ' of ' + jumlahData + ' entries');
+                }
+            }
+            $('#keyword').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

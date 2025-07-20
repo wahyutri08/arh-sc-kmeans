@@ -247,20 +247,20 @@ function deleteAtribut($id_atribut)
 }
 
 
-function addKelurahan($data)
+function addPC($data)
 {
     global $db;
-    $id_kelurahan = htmlspecialchars($data["id_kelurahan"]);
-    $nama_kelurahan = htmlspecialchars($data["nama_kelurahan"]);
+    $id_pc = htmlspecialchars($data["id_pc"]);
+    $nama_pc = htmlspecialchars($data["nama_pc"]);
 
-    $query = "SELECT * FROM kelurahan WHERE nama_kelurahan = '$nama_kelurahan' AND id_kelurahan != $id_kelurahan";
+    $query = "SELECT * FROM nama_pc WHERE nama_pc = '$nama_pc' AND id_pc != $id_pc";
     $result = mysqli_query($db, $query);
     if (mysqli_fetch_assoc($result)) {
         return -1;
     }
 
     // Periksa apakah ID atribut sudah ada
-    $query_id = "SELECT * FROM kelurahan WHERE id_kelurahan = $id_kelurahan";
+    $query_id = "SELECT * FROM nama_pc WHERE id_pc = $id_pc";
     $result_id = mysqli_query($db, $query_id);
 
     if (mysqli_fetch_assoc($result_id)) {
@@ -268,38 +268,38 @@ function addKelurahan($data)
         return -2;
     }
 
-    $query = "INSERT INTO kelurahan VALUES 
-    ('$id_kelurahan', '$nama_kelurahan')";
+    $query = "INSERT INTO nama_pc VALUES 
+    ('$id_pc', '$nama_pc')";
 
     mysqli_query($db, $query);
     return mysqli_affected_rows($db);
 }
 
-function editKelurahan($data)
+function editPC($data)
 {
     global $db;
-    $id_kelurahan = ($data["id_kelurahan"]);
-    $nama_kelurahan = htmlspecialchars($data["nama_kelurahan"]);
+    $id_pc = ($data["id_pc"]);
+    $nama_pc = htmlspecialchars($data["nama_pc"]);
 
     // Periksa apakah nama atribut sudah ada, tetapi abaikan baris yang sedang diedit
-    $query = "SELECT * FROM kelurahan WHERE nama_kelurahan = '$nama_kelurahan' AND id_kelurahan != $id_kelurahan";
+    $query = "SELECT * FROM nama_pc WHERE nama_pc = '$nama_pc' AND id_pc != $id_pc";
     $result = mysqli_query($db, $query);
 
     if (mysqli_fetch_assoc($result)) {
         return -1;
     }
 
-    $query = "UPDATE kelurahan SET 
-        nama_kelurahan = '$nama_kelurahan' WHERE id_kelurahan = $id_kelurahan";
+    $query = "UPDATE nama_pc SET 
+        nama_pc = '$nama_pc' WHERE id_pc = $id_pc";
     mysqli_query($db, $query);
 
     return mysqli_affected_rows($db);
 }
 
-function deleteKelurahan($id_kelurahan)
+function deletePC($id_pc)
 {
     global $db;
-    mysqli_query($db, "DELETE FROM kelurahan WHERE id_kelurahan = $id_kelurahan");
+    mysqli_query($db, "DELETE FROM nama_pc WHERE id_pc = $id_pc");
     return mysqli_affected_rows($db);
 }
 

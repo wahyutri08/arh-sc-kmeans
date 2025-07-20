@@ -76,6 +76,7 @@ if (isset($_POST["login"])) {
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
     <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
     <!--end::Accessibility Features-->
@@ -110,13 +111,13 @@ if (isset($_POST["login"])) {
 <body class="login-page bg-body-secondary">
     <div class="login-box">
         <div class="card card-outline card-primary">
-            <div class="card-header">
-                <a
-                    href="../login"
-                    class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
+            <div class="card-header d-flex align-items-center">
+                <img src="../assets/dist/img/logo/logo.png" alt="Logo" id="logo" class="brand-image img-circle" style="width: 50px; height: 50px;">
+                <a href="../login" class="link-dark text-decoration-none ms-2">
                     <h3 class="mb-0"><b>BERSAUDARA PRINT</b></h3>
                 </a>
             </div>
+
             <div class="card-body login-card-body">
                 <?php if ($error) : ?>
                     <div class="alert alert-danger" role="alert">
