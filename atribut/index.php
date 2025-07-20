@@ -153,7 +153,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         </div>
                                                     </td>
                                                 </tr>
-
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
