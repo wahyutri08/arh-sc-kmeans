@@ -110,23 +110,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="row">
                         <div class="col">
                             <div class="card card-outline card-success">
-                                <div class="card-header">
-                                    <!-- <h3 class="card-title"><a href="add_pc.php" class="btn btn-sm btn-block bg-gradient-success"><i class="fas fa-plus"></i> Tambah Data</a></h3> -->
-                                    <!-- <div class="card-tools mt-1">
-                                        <form action="" method="POST">
-                                            <div class="input-group input-group-sm" style="width: 150px;">
-                                                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="Search">
-
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-default">
-                                                        <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div> -->
-                                </div>
-                                <!-- /.card-header -->
                                 <div class="card-body">
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>

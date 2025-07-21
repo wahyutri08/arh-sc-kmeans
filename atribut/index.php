@@ -248,6 +248,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $('#example2').DataTable({
                 "paging": true,
                 "lengthChange": true,
+                "pageLength": 100,
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ],
                 "searching": true,
                 "ordering": true,
                 "info": true,
