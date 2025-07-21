@@ -6,21 +6,21 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-if (isset($_GET["id_pc"]) && is_numeric($_GET["id_pc"])) {
-    $id_pc = $_GET["id_pc"];
+if (isset($_GET["id_cluster"]) && is_numeric($_GET["id_cluster"])) {
+    $id_cluster = $_GET["id_cluster"];
 } else {
     header("HTTP/1.1 404 Not Found");
     include("../errors/404.html");
     exit;
 }
 
-$nama_pc = query("SELECT * FROM nama_pc WHERE id_pc = $id_pc");
-if (empty($nama_pc)) {
+$cluster = query("SELECT * FROM cluster WHERE id_cluster = $id_cluster");
+if (empty($cluster)) {
     header("HTTP/1.1 404 Not Found");
     include("../errors/404.html");
     exit;
 }
-$nama_pc = $nama_pc[0];
+$cluster = $cluster[0];
 
 $atribut = query("SELECT * FROM atribut");
 
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Eksekusi dan cek hasil
     ob_start(); // untuk debug jika error
-    $affected = dataPostnilaiPC($_POST, $_GET);
+    $affected = dataPostnilaiCluster($_POST, $_GET);
 
     if ($affected > 0) {
         echo json_encode(["status" => "success", "message" => "Data Berhasil Diubah"]);
@@ -53,7 +53,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Nilai PC - <?= $nama_pc["nama_pc"]; ?></title>
+    <title>Edit Nilai Cluster - <?= $cluster["nama_cluster"]; ?></title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -83,15 +83,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Edit Nilai PC Editing</h1>
+                            <h1 class="m-0">Edit Nilai Cluster</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                                 <li class="breadcrumb-item">Master Data</li>
-                                <li class="breadcrumb-item">Data PC Editing</li>
-                                <li class="breadcrumb-item">Edit Nilai PC Editing</li>
-                                <li class="breadcrumb-item active"><?= $nama_pc["nama_pc"]; ?></li>
+                                <li class="breadcrumb-item">Data Cluster</li>
+                                <li class="breadcrumb-item">Edit Nilai Cluster</li>
+                                <li class="breadcrumb-item active"><?= $cluster["nama_cluster"]; ?></li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -109,18 +109,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- jquery validation -->
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title"><?= $nama_pc["nama_pc"]; ?></h3>
+                                    <h3 class="card-title"><?= $cluster["nama_cluster"]; ?></h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
-                                    <input type="hidden" name="id_pc" value="<?= $nama_pc["id_pc"]; ?>">
+                                    <input type="hidden" name="id_cluster" value="<?= $cluster["id_cluster"]; ?>">
                                     <div class="card-body">
                                         <?php foreach ($atribut as $row) : ?>
-                                            <?php $nilaiPC = query("SELECT * FROM nilai_pc WHERE id_pc = " . $nama_pc['id_pc'] . " AND id_atribut = " . $row['id_atribut']); ?>
+                                            <?php $nilaiCluster = query("SELECT * FROM nilai_cluster WHERE id_cluster = " . $cluster['id_cluster'] . " AND id_atribut = " . $row['id_atribut']); ?>
                                             <div class="form-group col-md-5">
                                                 <label for="<?= $row["id_atribut"]; ?>"><?= $row["nama_atribut"]; ?>:</label>
-                                                <input type="number" name="<?= $row["id_atribut"]; ?>" id="<?= $row["id_atribut"]; ?>" class="form-control" value="<?= $nilaiPC ? $nilaiPC[0]["nilai"] : ""; ?>" placeholder="Nilai">
+                                                <input type="number" name="<?= $row["id_atribut"]; ?>" id="<?= $row["id_atribut"]; ?>" class="form-control" value="<?= $nilaiCluster ? $nilaiCluster[0]["nilai"] : ""; ?>" placeholder="Nilai">
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
@@ -230,7 +230,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         if (res.status === 'success') {
                             Swal.fire('Berhasil', res.message, 'success').then(() => {
-                                window.location.href = '../nilai_pc';
+                                window.location.href = '../nilai_cluster';
                             });
                         } else {
                             Swal.fire('Gagal', res.message, 'error');

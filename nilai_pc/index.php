@@ -95,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                                 <li class="breadcrumb-item">Nilai Data</li>
-                                <li class="breadcrumb-item active">Edit Nilai Data PC Editing</li>
+                                <li class="breadcrumb-item active">Nilai Data PC Editing</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -128,7 +128,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
@@ -265,6 +265,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "paging": true,
                 "lengthChange": true,
                 "pageLength": 100,
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ],
                 "searching": true,
                 "ordering": true,
                 "info": true,

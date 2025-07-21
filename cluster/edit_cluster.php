@@ -6,41 +6,37 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-if (isset($_GET["id_pc"]) && is_numeric($_GET["id_pc"])) {
-    $id_pc = $_GET["id_pc"];
+if (isset($_GET["id_cluster"]) && is_numeric($_GET["id_cluster"])) {
+    $id_cluster = $_GET["id_cluster"];
 } else {
     header("HTTP/1.1 404 Not Found");
     include("../errors/404.html");
     exit;
 }
 
-$nama_pc = query("SELECT * FROM nama_pc WHERE id_pc = $id_pc");
-if (empty($nama_pc)) {
+$cluster = query("SELECT * FROM cluster WHERE id_cluster = $id_cluster");
+
+if (empty($cluster)) {
     header("HTTP/1.1 404 Not Found");
     include("../errors/404.html");
     exit;
 }
-$nama_pc = $nama_pc[0];
 
-$atribut = query("SELECT * FROM atribut");
+$cluster = $cluster[0];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST)) {
-        echo json_encode(["status" => "error", "message" => "Tidak ada data yang diinput"]);
-        exit;
-    }
-
-    // Eksekusi dan cek hasil
-    ob_start(); // untuk debug jika error
-    $affected = dataPostnilaiPC($_POST, $_GET);
-
-    if ($affected > 0) {
-        echo json_encode(["status" => "success", "message" => "Data Berhasil Diubah"]);
+    $result = editCluster($_POST);
+    if ($result > 0) {
+        echo json_encode(["status" => "success", "message" => "Data Successfully Changed"]);
+    } elseif ($result == -1) {
+        echo json_encode(["status" => "error", "message" => "Attribute Name Already Exists"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Tidak ada data yang diubah"]);
+        echo json_encode(["status" => "error", "message" => "Data Failed to Change"]);
     }
     exit;
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -53,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Nilai PC - <?= $nama_pc["nama_pc"]; ?></title>
+    <title>Edit Cluster - <?= $cluster["nama_cluster"]; ?></title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -83,15 +79,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Edit Nilai PC Editing</h1>
+                            <h1 class="m-0">Edit Cluster</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                                 <li class="breadcrumb-item">Master Data</li>
-                                <li class="breadcrumb-item">Data PC Editing</li>
-                                <li class="breadcrumb-item">Edit Nilai PC Editing</li>
-                                <li class="breadcrumb-item active"><?= $nama_pc["nama_pc"]; ?></li>
+                                <li class="breadcrumb-item">Data Cluster</li>
+                                <li class="breadcrumb-item">Edit Cluster</li>
+                                <li class="breadcrumb-item active"><?= $cluster["nama_cluster"]; ?></li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -107,26 +103,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- left column -->
                         <div class="col-md-12">
                             <!-- jquery validation -->
-                            <div class="card card-success">
+                            <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title"><?= $nama_pc["nama_pc"]; ?></h3>
+                                    <h3 class="card-title"><?= $cluster["nama_cluster"]; ?></h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
-                                    <input type="hidden" name="id_pc" value="<?= $nama_pc["id_pc"]; ?>">
+                                    <input type="hidden" name="id_cluster" value="<?= $cluster["id_cluster"]; ?>">
                                     <div class="card-body">
-                                        <?php foreach ($atribut as $row) : ?>
-                                            <?php $nilaiPC = query("SELECT * FROM nilai_pc WHERE id_pc = " . $nama_pc['id_pc'] . " AND id_atribut = " . $row['id_atribut']); ?>
-                                            <div class="form-group col-md-5">
-                                                <label for="<?= $row["id_atribut"]; ?>"><?= $row["nama_atribut"]; ?>:</label>
-                                                <input type="number" name="<?= $row["id_atribut"]; ?>" id="<?= $row["id_atribut"]; ?>" class="form-control" value="<?= $nilaiPC ? $nilaiPC[0]["nilai"] : ""; ?>" placeholder="Nilai">
-                                            </div>
-                                        <?php endforeach; ?>
+                                        <div class="form-group col-md-5">
+                                            <label for="nama_cluster">Nama Cluster:</label>
+                                            <input type="text" name="nama_cluster" class="form-control" id="nama_cluster" placeholder="Nama Cluster" value="<?= $cluster["nama_cluster"]; ?>">
+                                        </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-solid fa-check"></i> Save Change</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-solid fa-check"></i> Save Change</button>
                                     </div>
                                 </form>
                             </div>
@@ -175,26 +168,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery Validation + AJAX Submit -->
     <script>
         $(function() {
+            // Inisialisasi validasi jQuery
             $('#quickForm').validate({
                 rules: {
-                    <?php
-                    $last = end($atribut);
-                    foreach ($atribut as $row):
-                    ?> "<?= $row['id_atribut']; ?>": {
-                            required: true
-                        }
-                        <?= $row !== $last ? ',' : '' ?>
-                    <?php endforeach; ?>
+                    id_cluster: {
+                        required: true
+                    },
+                    nama_cluster: {
+                        required: true
+                    }
                 },
                 messages: {
-                    <?php
-                    $last = end($atribut);
-                    foreach ($atribut as $row):
-                    ?> "<?= $row['id_atribut']; ?>": {
-                            required: "Nilai <?= addslashes($row['nama_atribut']); ?> wajib diisi"
-                        }
-                        <?= $row !== $last ? ',' : '' ?>
-                    <?php endforeach; ?>
+                    id_cluster: {
+                        required: "Please enter an ID Cluster"
+                    },
+                    nama_cluster: {
+                        required: "Please enter a Nama Cluster"
+                    }
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
@@ -209,12 +199,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }
             });
 
+            // Submit dengan AJAX hanya jika valid
             $('#quickForm').on('submit', function(e) {
                 e.preventDefault();
-                if (!$(this).valid()) return;
+
+                if (!$(this).valid()) return; // Stop jika form tidak valid
 
                 $.ajax({
-                    url: '',
+                    url: '', // Ganti dengan URL aksi jika perlu
                     type: 'POST',
                     data: new FormData(this),
                     processData: false,
@@ -224,26 +216,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         try {
                             res = JSON.parse(response);
                         } catch (e) {
-                            Swal.fire('Error', 'Respon server tidak valid', 'error');
+                            Swal.fire('Error', 'Invalid Server Response', 'error');
                             return;
                         }
 
                         if (res.status === 'success') {
-                            Swal.fire('Berhasil', res.message, 'success').then(() => {
-                                window.location.href = '../nilai_pc';
+                            Swal.fire({
+                                title: "Success",
+                                text: res.message,
+                                icon: "success"
+                            }).then(() => {
+                                window.location.href = '../cluster';
                             });
                         } else {
-                            Swal.fire('Gagal', res.message, 'error');
+                            Swal.fire('Error', res.message, 'error');
                         }
                     },
                     error: function() {
-                        Swal.fire('Gagal', 'Terjadi kesalahan pada server', 'error');
+                        Swal.fire('Error', 'An Error Occurred on the Server', 'error');
                     }
                 });
             });
         });
     </script>
-
 
 </body>
 

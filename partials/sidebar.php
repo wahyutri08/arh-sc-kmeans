@@ -4,6 +4,7 @@ $current_page = basename($_SERVER['REQUEST_URI']);
 
 // Halaman-halaman yang berada di dalam Master Data
 $master_data_pages = ['atribut', 'nama_pc', 'cluster'];
+$nilai_data = ['nilai_pc', 'nilai_cluster'];
 $keputusan = ['proses', 'penilaian'];
 $settings_page = ['profile', 'change_password'];
 $id = $_SESSION["id"];
@@ -71,8 +72,8 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </ul>
                 </li>
                 <!-- <li class="nav-header">PROSES</li> -->
-                <li class="nav-item <?= (in_array($current_page, $keputusan)) ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= (in_array($current_page, $keputusan)) ? 'active' : '' ?>">
+                <li class="nav-item <?= (in_array($current_page, $nilai_data)) ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= (in_array($current_page, $nilai_data)) ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Nilai Data

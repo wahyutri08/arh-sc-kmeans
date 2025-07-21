@@ -449,49 +449,78 @@ function deletenilaiPC($id_pc)
     return mysqli_affected_rows($db);
 }
 
-function dataPostCluster($postData, $getData)
+function dataPostnilaiCluster($postData, $getData)
 {
+    global $db;
+    $affected = 0;
+
     foreach ($postData as $key => $value) {
         if ($key == 'id_cluster' || $key == 'submit') {
             continue;
         }
 
-        // Tambahkan nama variabel ke dalam array
-        $querySelect = query("SELECT * FROM nilai_cluster WHERE id_atribut = " . $key . " AND id_cluster = " . $getData['id_cluster']);
+        $id_atribut = intval($key);
+        $id_cluster = intval($getData['id_cluster']);
+        $nilai = mysqli_real_escape_string($db, $value);
 
-        if (count($querySelect) > 0) {
-            editnilaiCluster($postData, $getData, $key);
+        $cek = mysqli_query($db, "SELECT * FROM nilai_cluster WHERE id_atribut = $id_atribut AND id_cluster = $id_cluster");
+
+        if (mysqli_num_rows($cek) > 0) {
+            $query = "UPDATE nilai_cluster SET nilai = '$nilai' WHERE id_atribut = $id_atribut AND id_cluster = $id_cluster";
         } else {
-            tambahnilaiCluster($postData, $getData, $key);
+            $query = "INSERT INTO nilai_cluster (id_atribut, id_cluster, nilai) VALUES ($id_atribut, $id_cluster, '$nilai')";
         }
+
+        mysqli_query($db, $query) or die("Query Error: " . mysqli_error($db));
+        $affected += mysqli_affected_rows($db);
     }
+
+    return $affected;
 }
 
-function editnilaiCluster($post, $get, $key)
-{
-    global $db;
-    $query = "UPDATE nilai_cluster SET 
-    nilai = " . $post[$key] . " WHERE id_atribut = " . $key . " AND id_cluster = " . $get['id_cluster'];
-    mysqli_query($db, $query);
+// function dataPostCluster($postData, $getData)
+// {
+//     foreach ($postData as $key => $value) {
+//         if ($key == 'id_cluster' || $key == 'submit') {
+//             continue;
+//         }
 
-    return mysqli_affected_rows($db);
-}
+//         // Tambahkan nama variabel ke dalam array
+//         $querySelect = query("SELECT * FROM nilai_cluster WHERE id_atribut = " . $key . " AND id_cluster = " . $getData['id_cluster']);
 
-function tambahnilaiCluster($post, $get, $key)
-{
-    global $db;
+//         if (count($querySelect) > 0) {
+//             editnilaiCluster($postData, $getData, $key);
+//         } else {
+//             tambahnilaiCluster($postData, $getData, $key);
+//         }
+//     }
+// }
 
-    $query = "INSERT INTO nilai_cluster VALUES 
-    (
-      " . $key . ", 
-      " . $get['id_cluster'] . ",
-       '',
-       $post[$key]
-    )";
+// function editnilaiCluster($post, $get, $key)
+// {
+//     global $db;
+//     $query = "UPDATE nilai_cluster SET 
+//     nilai = " . $post[$key] . " WHERE id_atribut = " . $key . " AND id_cluster = " . $get['id_cluster'];
+//     mysqli_query($db, $query);
 
-    mysqli_query($db, $query);
-    return mysqli_affected_rows($db);
-}
+//     return mysqli_affected_rows($db);
+// }
+
+// function tambahnilaiCluster($post, $get, $key)
+// {
+//     global $db;
+
+//     $query = "INSERT INTO nilai_cluster VALUES 
+//     (
+//       " . $key . ", 
+//       " . $get['id_cluster'] . ",
+//        '',
+//        $post[$key]
+//     )";
+
+//     mysqli_query($db, $query);
+//     return mysqli_affected_rows($db);
+// }
 
 function deletenilaiCluster($id_cluster)
 {
