@@ -360,56 +360,92 @@ function deleteCluster($id_cluster)
     return mysqli_affected_rows($db);
 }
 
-
-function dataPostKelurahan($postData, $getData)
+function dataPostnilaiPC($postData, $getData)
 {
+    global $db;
+    $affected = 0;
+
     foreach ($postData as $key => $value) {
-        if ($key == 'id_kelurahan' || $key == 'submit') {
+        if ($key == 'id_pc' || $key == 'submit') {
             continue;
         }
 
-        // Tambahkan nama variabel ke dalam array
-        $querySelect = query("SELECT * FROM nilai_kelurahan WHERE id_atribut = " . $key . " AND id_kelurahan = " . $getData['id_kelurahan']);
+        $id_atribut = intval($key);
+        $id_pc = intval($getData['id_pc']);
+        $nilai = mysqli_real_escape_string($db, $value);
 
-        if (count($querySelect) > 0) {
-            editnilaiKelurahan($postData, $getData, $key);
+        $cek = mysqli_query($db, "SELECT * FROM nilai_pc WHERE id_atribut = $id_atribut AND id_pc = $id_pc");
+
+        if (mysqli_num_rows($cek) > 0) {
+            $query = "UPDATE nilai_pc SET nilai = '$nilai' WHERE id_atribut = $id_atribut AND id_pc = $id_pc";
         } else {
-            tambahnilaiKelurahan($postData, $getData, $key);
+            $query = "INSERT INTO nilai_pc (id_atribut, id_pc, nilai) VALUES ($id_atribut, $id_pc, '$nilai')";
         }
+
+        mysqli_query($db, $query) or die("Query Error: " . mysqli_error($db));
+        $affected += mysqli_affected_rows($db);
     }
+
+    return $affected;
 }
 
+// function dataPostnilaiPC($postData, $getData)
+// {
+//     foreach ($postData as $key => $value) {
+//         if ($key == 'id_atribut' || $key == 'submit') {
+//             continue;
+//         }
 
-function editnilaiKelurahan($post, $get, $key)
+//         // Gunakan prepared statement jika memungkinkan (opsional)
+//         $querySelect = query("SELECT * FROM nilai_pc WHERE id_atribut = " . intval($key) . " AND id_pc = " . intval($getData['id_pc']));
+
+//         if (count($querySelect) > 0) {
+//             editnilaiPC($postData, $getData, $key);
+//         } else {
+//             tambahnilaiPC($postData, $getData, $key);
+//         }
+//     }
+// }
+
+// function editnilaiPC($post, $get, $key)
+// {
+//     global $db;
+
+//     $nilai = mysqli_real_escape_string($db, $post[$key]);
+
+//     $query = "UPDATE nilai_pc SET 
+//         nilai = '" . $nilai . "' 
+//         WHERE id_atribut = " . intval($key) . " 
+//         AND id_pc = " . intval($get['id_pc']);
+
+//     mysqli_query($db, $query);
+
+//     return mysqli_affected_rows($db);
+// }
+
+// function tambahnilaiPC($post, $get, $key)
+// {
+//     global $db;
+
+//     $nilai = mysqli_real_escape_string($db, $post[$key]);
+
+//     $query = "INSERT INTO nilai_pc (id_atribut, kolom_lain, id_pc, nilai) VALUES (
+//         " . intval($key) . ",
+//         '',
+//         " . intval($get['id_pc']) . ",
+//         '" . $nilai . "'
+//     )";
+
+//     mysqli_query($db, $query);
+
+//     return mysqli_affected_rows($db);
+// }
+
+
+function deletenilaiPC($id_pc)
 {
     global $db;
-    $query = "UPDATE nilai_kelurahan SET 
-    nilai = " . $post[$key] . " WHERE id_atribut = " . $key . " AND id_kelurahan = " . $get['id_kelurahan'];
-    mysqli_query($db, $query);
-
-    return mysqli_affected_rows($db);
-}
-
-function tambahnilaiKelurahan($post, $get, $key)
-{
-    global $db;
-
-    $query = "INSERT INTO nilai_kelurahan VALUES 
-    (
-      " . $key . ", 
-       '',
-       " . $get['id_kelurahan'] . ",
-       $post[$key]
-    )";
-
-    mysqli_query($db, $query);
-    return mysqli_affected_rows($db);
-}
-
-function deletenilaiKelurahan($id_kelurahan)
-{
-    global $db;
-    mysqli_query($db, "DELETE FROM nilai_kelurahan WHERE id_kelurahan = $id_kelurahan");
+    mysqli_query($db, "DELETE FROM nilai_pc WHERE id_pc = $id_pc");
     return mysqli_affected_rows($db);
 }
 
