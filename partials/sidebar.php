@@ -6,6 +6,7 @@ $current_page = basename($_SERVER['REQUEST_URI']);
 $master_data_pages = ['atribut', 'nama_pc', 'cluster'];
 $nilai_data = ['nilai_pc', 'nilai_cluster'];
 $keputusan = ['proses', 'penilaian'];
+$iterasi = ['iterasi'];
 $settings_page = ['profile', 'change_password'];
 $id = $_SESSION["id"];
 $role = $_SESSION["role"];
@@ -97,9 +98,9 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                 </li> <!-- ← ini tag penutup yang benar -->
 
                 <li class="nav-header">PERHITUNGAN</li>
-                <li class="nav-item <?= (in_array($current_page, $keputusan)) ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= (in_array($current_page, $keputusan)) ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-table"></i>
+                <li class="nav-item <?= (in_array($current_page, $iterasi)) ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= (in_array($current_page, $iterasi)) ? 'active' : '' ?>">
+                        <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Proses
                             <i class="fas fa-angle-left right"></i>

@@ -127,8 +127,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div> -->
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover">
+                                <div class="card-body table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover ">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
@@ -256,8 +256,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
-                "responsive": true,
+                "autoWidth": true,
+                "responsive": false,
             });
         });
     </script>

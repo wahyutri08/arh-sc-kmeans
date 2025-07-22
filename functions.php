@@ -883,7 +883,7 @@ function getInitialClusters($data, $initialCentroids)
 //     return 1; // Seluruh proses berhasil
 // }
 
-function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport, $kelurahan, $data, $atribut, $actualIterations)
+function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport, $nama_pc, $data, $atribut, $actualIterations)
 {
     global $db;
 
@@ -917,14 +917,14 @@ function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport
     // Proses laporan_hasil_akhir
     foreach ($clusters as $clusterId => $clusterData) {
         foreach ($clusterData as $dataIndex) {
-            $nama_kelurahan = mysqli_real_escape_string($db, $kelurahan[$dataIndex]['nama_kelurahan']);
+            $nama_pc_value = mysqli_real_escape_string($db, $nama_pc[$dataIndex]['nama_pc']);
             $nama_cluster = mysqli_real_escape_string($db, 'Cluster ' . ($clusterId + 1));
 
-            $query = "SELECT id FROM laporan_hasil_akhir WHERE id_laporan = '$id_laporan' AND nama_kelurahan = '$nama_kelurahan' AND nama_cluster = '$nama_cluster'";
+            $query = "SELECT id FROM laporan_hasil_akhir WHERE id_laporan = '$id_laporan' AND nama_pc = '$nama_pc_value' AND nama_cluster = '$nama_cluster'";
             $result = mysqli_query($db, $query);
 
             if ($result && mysqli_num_rows($result) == 0) {
-                $query = "INSERT INTO laporan_hasil_akhir (id_laporan, nama_kelurahan, nama_cluster) VALUES ('$id_laporan', '$nama_kelurahan', '$nama_cluster')";
+                $query = "INSERT INTO laporan_hasil_akhir (id_laporan, nama_pc, nama_cluster) VALUES ('$id_laporan', '$nama_pc_value', '$nama_cluster')";
                 if (mysqli_query($db, $query)) {
                     $id_laporan_hasil_akhir = mysqli_insert_id($db);
                 } else {

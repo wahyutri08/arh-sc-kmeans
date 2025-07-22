@@ -119,7 +119,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Proses Perhitungan</h1>
+                            <h1 class="m-0">Tambah Atribut</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -147,7 +147,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
+                                <form method="POST" action="" enctype="multipart/form-data">
                                     <div class="card-body">
                                         <div class="form-group col-md-2">
                                             <label for="iterasi">Masukkan Iterasi:</label>
@@ -173,22 +173,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </section>
             <!-- Hasil Clustering -->
             <?php if (isset($_POST['submit'])) : ?>
-
-                <!-- SECTION: CENTROID AWAL -->
+                <!-- Tabel Hasil Clustering Sebelum Iterasi Pertama -->
                 <section class="content">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col">
                                 <div class="card card-outline card-success">
                                     <div class="card-header">
-                                        <strong>Hasil Clustering Sebelum Iterasi Pertama</strong><br>
-                                        <span>Centroid Awal</span>
+                                        <h3 class="card-title">Hasil Clustering Sebelum Iterasi Pertama</h3>
+                                        <p>
+                                        <h6>Centroid Awal</h6>
+                                        </p>
                                     </div>
-                                    <!-- <div class="card-header">
-                                        <h3 class="card-title">Centroid Awal</h3>
-                                    </div> -->
                                     <div class="card-body table-responsive">
-                                        <table id="exampleCentroidAwal" class="table table-bordered table-hover">
+                                        <table id="example22" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Cluster</th>
@@ -202,30 +200,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <tr>
                                                         <td>Cluster <?= $index + 1 ?></td>
                                                         <?php foreach ($centroid as $value) : ?>
-                                                            <td><?= number_format($value, 3) ?></td>
+                                                            <td><?= number_format($value) ?></td>
                                                         <?php endforeach; ?>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div> <!-- end card -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SECTION: CLUSTER AWAL -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card card-outline card-info">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Cluster Awal</h3>
-                                    </div>
+                                    <h3 class="card-title">Cluster Awal</h3>
                                     <div class="card-body table-responsive">
-                                        <table id="exampleClusterAwal" class="table table-bordered table-hover text-nowarp">
+                                        <table id="example22" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Nama PC Editing</th>
@@ -243,9 +227,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <?php foreach ($initialResult['clusters'] as $clusterId => $clusterData) : ?>
                                                     <?php foreach ($clusterData as $dataIndex) : ?>
                                                         <tr>
-                                                            <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
+                                                            <td><?= $nama_pc[$dataIndex]['nama_pc'] ?></td>
                                                             <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                                <td><?= number_format($value, 3) ?></td>
+                                                                <td><?= number_format($value) ?></td>
                                                             <?php endforeach; ?>
                                                             <?php
                                                             $distances = $initialResult['distances'][$dataIndex];
@@ -260,26 +244,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </tbody>
                                         </table>
                                     </div>
-                                </div> <!-- end card -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
-
-                <!-- SECTION: ITERASI -->
+                <!-- Tabel Hasil Iterasi -->
                 <?php foreach ($history as $iteration) : ?>
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col">
-                                    <!-- Centroid Iterasi -->
-                                    <div class="card card-outline card-warning">
+                                    <div class="card card-outline card-success">
                                         <div class="card-header">
-                                            <strong class="">Proses Iterasi <?= $iteration['iteration']; ?></strong><br>
-                                            <span>Centroid</span>
+                                            <h3 class="card-title">Proses Iterasi <?= $iteration['iteration']; ?></h3>
+                                            <p>
+                                            <h6>Centroid</h6>
+                                            </p>
                                         </div>
                                         <div class="card-body table-responsive">
-                                            <table id="example<?= $iteration['iteration'] ?>" class="table table-bordered table-hover">
+                                            <table id="example22" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Nama Cluster</th>
@@ -289,7 +273,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php foreach ($iteration['centroids'] as $index => $centroid) : ?>
+                                                    <?php
+                                                    $centroids = $iteration['centroids'];
+                                                    ksort($centroids);
+                                                    foreach ($iteration['centroids'] as $index => $centroid) : ?>
                                                         <tr>
                                                             <td><?= $cluster[$index]['nama_cluster'] ?></td>
                                                             <?php foreach ($centroid as $value) : ?>
@@ -300,15 +287,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
-
-                                    <!-- Hasil Iterasi -->
-                                    <div class="card card-outline card-warning">
-                                        <div class="card-header">
-                                            <h5 class="card-title mt-3">Hasil Proses Iterasi <?= $iteration['iteration']; ?></h5>
-                                        </div>
+                                        <h3 class="card-title">Hasil Proses Iterasi <?= $iteration['iteration']; ?></h3>
                                         <div class="card-body table-responsive">
-                                            <table id="exampleIterasi<?= $iteration['iteration'] ?>" class="table table-bordered table-hover">
+                                            <table id="example22" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Nama PC Editing</th>
@@ -326,20 +307,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <?php foreach ($iteration['clusters'] as $clusterId => $clusterData) : ?>
                                                         <?php foreach ($clusterData as $dataIndex) : ?>
                                                             <tr>
-                                                                <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
+                                                                <td><?= $nama_pc[$dataIndex]['nama_pc'] ?></td>
                                                                 <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                                    <td><?= number_format($value, 3) ?></td>
+                                                                    <td><?= number_format($value) ?></td>
                                                                 <?php endforeach; ?>
-
                                                                 <?php
                                                                 $distances = [];
                                                                 foreach ($iteration['centroids'] as $centroid) {
                                                                     $distances[] = calculateDistance($data[$dataIndex], $centroid);
                                                                 }
+                                                                ksort($distances);
                                                                 foreach ($distances as $distance) : ?>
                                                                     <td><?= number_format($distance, 3) ?></td>
                                                                 <?php endforeach; ?>
-
                                                                 <td><?= number_format(min($distances), 3) ?></td>
                                                                 <td>Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
                                                             </tr>
@@ -349,15 +329,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </table>
                                         </div>
                                     </div>
-
-                                </div> <!-- end col -->
-                            </div> <!-- end row -->
-                        </div> <!-- end container-fluid -->
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 <?php endforeach; ?>
-
             <?php endif; ?>
-
         </div>
         <!-- /.content-wrapper -->
 
@@ -403,53 +380,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
-    <!-- <script>
-        $(function() {
-            $("table#exampleCentroidAwal, table#exampleClusterAwal, table[id^=example], table[id^=exampleIterasi]").each(function() {
-                $(this).DataTable({
-                    paging: true,
-                    lengthChange: true,
-                    pageLength: 100,
-                    lengthMenu: [
-                        [10, 25, 50, 100, -1],
-                        [10, 25, 50, 100, "All"]
-                    ],
-                    searching: true,
-                    ordering: true,
-                    info: true,
-                    autoWidth: true,
-                    responsive: false
-                });
-            });
-        });
-    </script> -->
-    <script>
-        $(function() {
-            $("table#exampleCentroidAwal, table#exampleClusterAwal, table[id^=example], table[id^=exampleIterasi]").each(function() {
-                const table = $(this).DataTable({
-                    paging: true,
-                    lengthChange: true,
-                    pageLength: 10,
-                    lengthMenu: [
-                        [10, 25, 50, 100, -1],
-                        [10, 25, 50, 100, "All"]
-                    ],
-                    searching: true,
-                    ordering: true,
-                    info: true,
-                    autoWidth: true,
-                    responsive: false,
-                    buttons: ["excel", "print", "colvis"]
-                });
-
-                // Menambahkan tombol ke dalam wrapper (pastikan ID wrapper benar)
-                table.buttons().container()
-                    .appendTo($(this).closest('.dataTables_wrapper').find('.col-md-6:eq(0)'));
-            });
-        });
-    </script>
-
-
     <script>
         $(function() {
             // Inisialisasi validasi jQuery
@@ -478,7 +408,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
 
             // Submit dengan AJAX hanya jika valid
-            $('#quickForm1').on('submit', function(e) {
+            $('#quickForm').on('submit', function(e) {
                 e.preventDefault();
 
                 if (!$(this).valid()) return; // Stop jika form tidak valid
