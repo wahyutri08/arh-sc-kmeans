@@ -887,7 +887,7 @@ function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport
 {
     global $db;
 
-    $dateReport = date('Y-m-d', strtotime($dateReport));
+    $dateReport = date('Y-m-d');
 
     // Escape input
     $id_user = mysqli_real_escape_string($db, $id_user);
@@ -942,7 +942,10 @@ function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport
             // Proses atribut
             foreach ($data[$dataIndex] as $attrIndex => $value) {
                 $nama_atribut = mysqli_real_escape_string($db, $atribut[$attrIndex]['nama_atribut']);
-                $nilai = mysqli_real_escape_string($db, number_format($value, is_float($value) ? 2 : 0, '.', ''));
+                $nilai = (fmod($value, 1) != 0)
+                    ? number_format($value, 2, '.', '')
+                    : number_format($value, 0, '.', '');
+                $nilai = mysqli_real_escape_string($db, $nilai);
 
                 $query = "SELECT id FROM laporan_hasil_akhir_atribut WHERE id_laporan_hasil_akhir = '$id_laporan_hasil_akhir' AND nama_atribut = '$nama_atribut' AND nilai = '$nilai'";
                 $result = mysqli_query($db, $query);

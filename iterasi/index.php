@@ -99,11 +99,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
+    <style>
+        .overlay {
+            position: fixed;
+            /* penting: supaya menempel di layar */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* tengah secara vertikal */
+            align-items: center;
+            /* tengah secara horizontal */
+        }
+    </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="wrapper">
+    <div class="overlay-wrapper">
+        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
+            <div class="text-bold pt-2">Loading...</div>
+        </div>
 
+    </div>
+    <div class="wrapper">
         <!-- Navbar -->
         <?php require_once '../partials/navbar.php'; ?>
         <!-- /.navbar -->
@@ -423,7 +447,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
     </script> -->
-    <script>
+    <!-- <script>
         $(function() {
             $("table#exampleCentroidAwal, table#exampleClusterAwal, table[id^=example], table[id^=exampleIterasi]").each(function() {
                 const table = $(this).DataTable({
@@ -514,6 +538,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         Swal.fire('Error', 'An Error Occurred on the Server', 'error');
                     }
                 });
+            });
+        });
+    </script> -->
+    <script>
+        $(function() {
+            // ✅ Sembunyikan overlay saat halaman pertama kali dimuat
+            $('.overlay-wrapper .overlay').hide();
+
+            // ✅ Inisialisasi DataTables
+            $("table#exampleCentroidAwal, table#exampleClusterAwal, table[id^=example], table[id^=exampleIterasi]").each(function() {
+                const table = $(this).DataTable({
+                    paging: true,
+                    lengthChange: true,
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    autoWidth: true,
+                    responsive: false,
+                    buttons: ["excel", "print", "colvis"]
+                });
+
+                table.buttons().container()
+                    .appendTo($(this).closest('.dataTables_wrapper').find('.col-md-6:eq(0)'));
+            });
+
+            // ✅ Validasi form + tampilkan overlay jika valid
+            $('#quickForm').validate({
+                rules: {
+                    iterasi: {
+                        required: true
+                    },
+                },
+                messages: {
+                    iterasi: {
+                        required: "Please enter an Iterasi"
+                    },
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    // ✅ Tampilkan overlay saat form valid dan akan dikirim
+                    $('.overlay-wrapper .overlay').show();
+                    form.submit(); // Lanjutkan submit normal
+                }
             });
         });
     </script>

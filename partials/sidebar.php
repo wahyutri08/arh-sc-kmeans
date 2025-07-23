@@ -119,7 +119,7 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                 <!-- Laporan Hasil Analisa -->
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">
-                    <a href="../hasil" class="nav-link <?= ($current_page == 'hasil') ? 'active' : '' ?>">
+                    <a href="../laporan" class="nav-link <?= ($current_page == 'laporan') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>Hasil Perhitungan</p>
                     </a>
