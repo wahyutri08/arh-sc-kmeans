@@ -16,12 +16,12 @@
                 <i class="fas fa-expand-arrows-alt"></i>
             </a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown user-menu">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                <?php echo $_SESSION['username'] ?>
+                <span><?php echo $_SESSION['username'] ?></span>
             </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="../logout">Logout</a></li>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <li class="user-footer"><a class="btn btn-default btn-flat float-right  btn-block" href="../logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
             </ul>
         </li>
     </ul>

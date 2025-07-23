@@ -10,6 +10,18 @@ $id = $_SESSION["id"];
 $role = $_SESSION['role'];
 $user = query("SELECT * FROM users WHERE id = $id")[0];
 
+$query = query("
+        SELECT 
+            (SELECT COUNT(*) FROM nama_pc) AS total_pc,
+            (SELECT COUNT(*) FROM atribut) AS total_atribut,
+            (SELECT COUNT(*) FROM cluster) AS total_cluster,
+            (SELECT COUNT(*) FROM users) AS total_users
+    ");
+
+$totalPc = $query[0]['total_pc'];
+$totalAtribut = $query[0]['total_atribut'];
+$totalCluster = $query[0]['total_cluster'];
+$totalUsers = $query[0]['total_users'];
 ?>
 <!DOCTYPE html>
 <!--
@@ -73,14 +85,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>150</h3>
+                  <h3><?= $totalPc; ?></h3>
 
-                  <p>New Orders</p>
+                  <p>PC EDITING</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-bag"></i>
+                  <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">&nbsp;</a>
               </div>
             </div>
             <!-- ./col -->
@@ -88,14 +100,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
+                  <h3><?= $totalAtribut; ?></h3>
 
-                  <p>Bounce Rate</p>
+                  <p>ATRIBUT</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">&nbsp;</a>
               </div>
             </div>
             <!-- ./col -->
@@ -103,14 +115,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3><?= $totalCluster; ?></h3>
 
-                  <p>User Registrations</p>
+                  <p>CLUSTER</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-person-add"></i>
+                  <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">&nbsp;</a>
               </div>
             </div>
             <!-- ./col -->
@@ -118,14 +130,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3><?= $totalUsers; ?></h3>
 
-                  <p>Unique Visitors</p>
+                  <p>USERS</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
+                  <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">&nbsp;</a>
               </div>
             </div>
             <!-- ./col -->
@@ -140,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-xl-12 col-lg-12 py-2">
                   <div class="card shadow-sm" style="height : 19rem; background-color: #FFFFFF; background-position: calc(100% + 1rem) bottom; background-size: 30% auto; background-repeat: no-repeat; background-image: url(../assets/dist/img/rhone.svg);">
                     <div class=" px-4 mt-4">
-                      <h4 class="text-primary"> <b>Hai, <?= $user["nama"]; ?></b> </h4>
+                      <h4 class="text-primary"> <b>Selamat Datang, <?= $user["nama"]; ?></b> </h4>
                       <h4 class="text-black-50 mb-0">IMPLEMENTASI DATA MINING DALAM PENGREKOMENDASIAN DESKTOP PC TERBAIK</h4>
                       <h4 class="text-black-50 mb-0">UNTUK KEBUTUHAN EDITING DENGAN METODE ALGORITMA K-MEANS</h4>
                       <h4 class="text-black-50 mb-0">(STUDI KASUS : BERSAUDARA PRINT)</h4>
