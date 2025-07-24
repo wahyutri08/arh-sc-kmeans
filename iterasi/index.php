@@ -123,7 +123,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="overlay-wrapper">
         <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Loading...</div>
+            <div class="text-bold pt-2">Processing...</div>
         </div>
 
     </div>
@@ -424,6 +424,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Sweetalert -->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->

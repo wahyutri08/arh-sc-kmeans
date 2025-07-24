@@ -529,61 +529,6 @@ function deletenilaiCluster($id_cluster)
     return mysqli_affected_rows($db);
 }
 
-function searchAtribut($keyword)
-{
-    $query = "SELECT * FROM atribut WHERE
-              nama_atribut LIKE '%$keyword%' OR
-              id_atribut LIKE '%$keyword%'
-            ";
-    return query($query);
-}
-
-function searchCluster($keyword)
-{
-    $query = "SELECT * FROM cluster WHERE
-                nama_cluster LIKE '%$keyword%' OR
-                id_cluster LIKE '%$keyword%'
-             ";
-    return query($query);
-}
-
-function searchKelurahan($keyword)
-{
-    $query = "SELECT * FROM kelurahan WHERE
-                nama_kelurahan LIKE '%$keyword%' OR
-                id_kelurahan LIKE '%$keyword'
-             ";
-    return query($query);
-}
-
-function searchNilaiKelurahan($keyword)
-{
-    $query = "SELECT * FROM kelurahan WHERE
-                nama_kelurahan LIKE '%$keyword%'
-             ";
-    return query($query);
-}
-
-function searchNilaiCluster($keyword)
-{
-    $query = "SELECT * FROM kelurahan WHERE
-                nama_kelurahan LIKE '%$keyword%'
-             ";
-    return query($query);
-}
-
-function searchUsers($keyword)
-{
-    $query = "SELECT * FROM users WHERE
-                id LIKE '%$keyword%' OR
-                username LIKE '%$keyword%' OR
-                nama LIKE '%$keyword%' OR
-                email LIKE '%$keyword%' OR
-                role LIKE '%$keyword%'
-             ";
-    return query($query);
-}
-
 function is_user_active($id)
 {
     global $db;

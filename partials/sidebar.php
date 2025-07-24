@@ -167,7 +167,7 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                 }
                 ?>
                 <li class="nav-item">
-                    <a href="../logout" class="nav-link">
+                    <a href="../logout" class="nav-link" id="btnLogout">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>Logout</p>
                     </a>

@@ -7,7 +7,7 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-// Pastikan fungsi deletenilaiKelurahan sudah didefinisikan dan bekerja dengan benar
+// Pastikan fungsi deletenilaiPC sudah didefinisikan dan bekerja dengan benar
 $id_pc = $_GET["id_pc"];
 
 if (deletenilaiPC($id_pc) > 0) {

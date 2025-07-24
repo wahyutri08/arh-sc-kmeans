@@ -190,9 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <span class="nav-icon fas fa-table"></span> &nbsp;DATA CLUSTER ITERASI TERAKHIR
 
                                     <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <!-- <i class="fas fa-minus"></i> -->
-                                        </button>
+                                        &nbsp;
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -220,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </thead>
                                         <tbody>
                                             <?php
-                                            // Organize data by kelurahan
+                                            // Organize data by PC
                                             $data_by_pc = [];
                                             foreach ($hasil_akhir as $data) {
                                                 $data_by_pc[$data['nama_pc']]['cluster'] = $data['nama_cluster'];
@@ -409,6 +407,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Sweetalert -->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->

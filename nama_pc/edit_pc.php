@@ -161,6 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Sweetalert -->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->

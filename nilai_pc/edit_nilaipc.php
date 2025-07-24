@@ -26,7 +26,7 @@ $atribut = query("SELECT * FROM atribut");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST)) {
-        echo json_encode(["status" => "error", "message" => "Tidak ada data yang diinput"]);
+        echo json_encode(["status" => "error", "message" => "No Data Was Inputted"]);
         exit;
     }
 
@@ -35,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $affected = dataPostnilaiPC($_POST, $_GET);
 
     if ($affected > 0) {
-        echo json_encode(["status" => "success", "message" => "Data Berhasil Diubah"]);
+        echo json_encode(["status" => "success", "message" => "Data Successfully Changed"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Tidak ada data yang diubah"]);
+        echo json_encode(["status" => "error", "message" => "No Data Changed"]);
     }
     exit;
 }
@@ -170,6 +170,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Sweetalert -->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->

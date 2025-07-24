@@ -38,13 +38,13 @@ if (isset($_POST["login"])) {
                 header("Location: ../home");
                 exit;
             } else {
-                $error = 'Password Salah.';
+                $error = 'Wrong Password.';
             }
         } else {
-            $error = 'Akun Anda Tidak Aktif. Silakan Hubungi Admin.';
+            $error = 'Your account is inactive. Please contact the admin.';
         }
     } else {
-        $error = 'Username atau Email tidak ditemukan.';
+        $error = 'Username or Email not found.';
     }
 }
 ?>
