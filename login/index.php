@@ -113,11 +113,6 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
             </div>
 
             <div class="card-body login-card-body">
-                <!-- <?php if ($error) : ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= $error ?>
-                    </div>
-                <?php endif; ?> -->
                 <p class="login-box-msg">Sign in to start your session</p>
                 <form action="" method="POST" id="myForm">
                     <div class="input-group mb-1">
