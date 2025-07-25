@@ -28,15 +28,25 @@ function register($data)
     global $db;
 
     $username = strtolower(stripcslashes($data["username"]));
-    $nama = ucfirst(stripslashes($data["nama"]));
     $email = strtolower(stripslashes($data["email"]));
+    $nama = ucfirst(stripslashes($data["nama"]));
     $password = mysqli_real_escape_string($db, $data["password"]);
     $password2 = mysqli_real_escape_string($db, $data["password2"]);
     $role = htmlspecialchars($data["role"]);
+    $status = htmlspecialchars($data["status"]);
+
+    // //  Upload Gambar
+    // $avatar = upload();
+    // if (!$avatar) {
+    //     return -3;
+    // } elseif ($avatar === -1) {
+    //     // Kesalahan Ukuran Terlalu Besar
+    //     return -4;
+    // }
 
     //  Upload Gambar
     $avatar = upload();
-    if (!$avatar) {
+    if ($avatar === -1) {
         return -3;
     }
 
@@ -54,10 +64,9 @@ function register($data)
 
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    mysqli_query($db, "INSERT INTO users VALUES('', '$username','$nama', '$email', '$password', '$role', '$avatar')");
+    mysqli_query($db, "INSERT INTO users VALUES('', '$username','$email', '$nama', '$password', '$role', '$status', '$avatar')");
     return mysqli_affected_rows($db);
 }
-
 function upload()
 {
 
@@ -87,7 +96,7 @@ function upload()
     $namaFileBaru .= '.';
     $namaFileBaru .= $ekstensiAvatar;
 
-    move_uploaded_file($tmpName, '../assets/images/users/' . $namaFileBaru);
+    move_uploaded_file($tmpName, '../assets/dist/img/profile/' . $namaFileBaru);
 
     return $namaFileBaru;
 }
@@ -142,6 +151,25 @@ function editProfile($data)
     return mysqli_affected_rows($db);
 }
 
+function changePassword($data)
+{
+    global $db;
+    $id = ($data["id"]);
+    $password = mysqli_real_escape_string($db, $data["password"]);
+    $password2 = mysqli_real_escape_string($db, $data["password2"]);
+
+    if ($password !== $password2) {
+        return -1;
+    }
+
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $query = "UPDATE users SET 
+    password = '$password' WHERE id = $id";
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
 function editUsers($data)
 {
     global $db;
@@ -150,8 +178,10 @@ function editUsers($data)
     $nama = ucfirst(stripcslashes($data["nama"]));
     $email = strtolower(stripslashes($data["email"]));
     $password = mysqli_real_escape_string($db, $data["password"]);
+    $password2 = mysqli_real_escape_string($db, $data["password2"]);
     $avatarLama = htmlspecialchars($data["avatarLama"]);
     $role = htmlspecialchars($data["role"]);
+    $status = htmlspecialchars($data["status"]);
     // $usernameLama = htmlspecialchars($data["username"]);
 
     // Cek apakah user pilih avatar baru atau tidak
@@ -168,6 +198,11 @@ function editUsers($data)
         }
     }
 
+    if ($password !== $password2) {
+        // Password 1 tidak sesuai dengan password 2
+        return -3;
+    }
+
     $password = password_hash($password, PASSWORD_DEFAULT);
     $query = "UPDATE users SET 
         username = '$username', 
@@ -175,6 +210,7 @@ function editUsers($data)
         email = '$email',
         password = '$password',
         role = '$role',
+        status = '$status',
         avatar = '$avatar' WHERE id = $id";
     mysqli_query($db, $query);
 
@@ -533,18 +569,21 @@ function is_user_active($id)
 {
     global $db;
 
-    $result = mysqli_query($db, "SELECT COUNT(*) AS count FROM users WHERE id = '$id'");
+    // Cek status pengguna berdasarkan ID
+    $result = mysqli_query($db, "SELECT status FROM users WHERE id = '$id'");
     $row = mysqli_fetch_assoc($result);
+
+    // Jika data ditemukan
     if ($row) {
-        $count = $row["count"];
-        if ($count > 0) {
+        // Cek apakah statusnya 'Aktif'
+        if ($row['status'] === 'Aktif') {
             return true;
         }
-    } else {
-        return false;
     }
-}
 
+    // Jika tidak aktif atau tidak ditemukan
+    return false;
+}
 function logout()
 {
     // Hapus semua data sesi

@@ -24,7 +24,7 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="../assets/dist/img/<?= $user['avatar']; ?>" class="brand-image img-circle elevation-3" alt="User Image">
+                <img src="../assets/dist/img/profile/<?= $user['avatar']; ?>" class="brand-image img-circle elevation-3" alt="User Image">
             </div>
             <div class="info">
                 <a href="../home" class="d-block ml-1 h6"><span><?= $user["nama"]; ?></span></a>

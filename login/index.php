@@ -41,7 +41,7 @@ if (isset($_POST["login"])) {
                 $error = 'Wrong Password.';
             }
         } else {
-            $error = 'Your account is inactive. Please contact the admin.';
+            $error = 'Your account is Inactive.';
         }
     } else {
         $error = 'Username or Email not found.';

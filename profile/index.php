@@ -12,13 +12,13 @@ $users = query("SELECT * FROM users WHERE id = $id")[0];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = editProfile($_POST);
     if ($result > 0) {
-        echo json_encode(["status" => "success", "message" => "Data Berhasil Diubah"]);
+        echo json_encode(["status" => "success", "message" => "Data Successfully Changed"]);
     } elseif ($result == -1) {
-        echo json_encode(["status" => "error", "message" => "File Bukan Format Gambar"]);
+        echo json_encode(["status" => "error", "message" => "File is not an image format"]);
     } elseif ($result == -2) {
-        echo json_encode(["status" => "error", "message" => "Ukuran Gambar Terlalu Besar"]);
+        echo json_encode(["status" => "error", "message" => "Image Size Too Large"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Data Gagal Diubah"]);
+        echo json_encode(["status" => "error", "message" => "Data Failed to Change"]);
     }
     exit;
 }
@@ -86,11 +86,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-md-3">
 
                             <!-- Profile Image -->
-                            <div class="card card-primary card-outline">
+                            <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
                                         <img class="profile-user-img img-fluid img-circle"
-                                            src="../assets/dist/img/<?= $users["avatar"]; ?>"
+                                            src="../assets/dist/img/profile/<?= $users["avatar"]; ?>"
                                             style="width: 150px; height: 140px;">
                                     </div>
                                     <h3 class="profile-username text-center"><?= $users["nama"]; ?></h3>
@@ -101,10 +101,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                         <!-- /.col -->
                         <div class="col-md-9">
-                            <div class="card card-primary card-outline">
+                            <div class="card card-success card-outline">
                                 <div class="card-header p-2">
                                     <ul class="nav nav-pills">
-                                        <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                                        <li class="nav-item">
+                                            <button class="btn btn-success" data-toggle="tab">Settings</button>
+                                        </li>
                                     </ul>
                                 </div><!-- /.card-header -->
                                 <div class="card-body">
@@ -145,7 +147,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="offset-sm-2 col-sm-10">
-                                                        <button type="submit" name="submit" class="btn btn-success float-right"><i class="fa-solid fa-check"></i> Save</button>
+                                                        <button type="submit" name="submit" class="btn btn-success float-right"><i class="fas fa-solid fa-check"></i> Save Changes</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -208,7 +210,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 text: res.message,
                                 icon: "success"
                             }).then(() => {
-                                window.location.href = '../dashboard';
+                                window.location.href = '../profile';
                             });
                         } else {
                             Swal.fire('Error', res.message, 'error');
