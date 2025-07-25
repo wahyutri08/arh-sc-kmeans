@@ -6,46 +6,40 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Cegah akses ke halaman ini jika pengguna sudah login
-if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
-    header("Location: ../dashboard");
-    exit;
-}
-
-$error = '';
-
-if (isset($_POST["login"])) {
+// AJAX LOGIN
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $usernameOremail = $_POST["username"];
     $password = $_POST["password"];
-
-    // Query untuk mencari pengguna berdasarkan username atau email
     $result = mysqli_query($db, "SELECT * FROM users WHERE username = '$usernameOremail' OR email = '$usernameOremail'");
-
     if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
-
-        // Cek status pengguna
         if ($row['status'] === 'Aktif') {
-            // Verifikasi password
             if (password_verify($password, $row["password"])) {
-                // Jika login berhasil, set session
                 $_SESSION["login"] = true;
                 $_SESSION['nama'] = $row['nama'];
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['avatar'] = $row['avatar'];
                 $_SESSION['role'] = $row['role'];
-                header("Location: ../home");
+                echo json_encode(['status' => 'success', 'redirect' => '../home']);
                 exit;
             } else {
                 $error = 'Wrong Password.';
             }
         } else {
-            $error = 'Your account is Inactive.';
+            $error = 'Your Account is Inactive. Please Contact Admin.';
         }
     } else {
-        $error = 'Username or Email not found.';
+        $error = 'Username or Email Not Found.';
     }
+    echo json_encode(['status' => 'error', 'message' => $error]);
+    exit;
+}
+
+// Cegah akses ke halaman ini jika sudah login
+if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
+    header("Location: ../home");
+    exit;
 }
 ?>
 
@@ -119,11 +113,11 @@ if (isset($_POST["login"])) {
             </div>
 
             <div class="card-body login-card-body">
-                <?php if ($error) : ?>
+                <!-- <?php if ($error) : ?>
                     <div class="alert alert-danger" role="alert">
                         <?= $error ?>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?> -->
                 <p class="login-box-msg">Sign in to start your session</p>
                 <form action="" method="POST" id="myForm">
                     <div class="input-group mb-1">
@@ -143,9 +137,9 @@ if (isset($_POST["login"])) {
                     <!--begin::Row-->
                     <div class="row">
                         <!-- /.col -->
-                        <div class="col-5 mt-3">
-                            <div class="d-grid gap-2">
-                                <button type="submit" name="login" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                        <div class=" mt-3">
+                            <div class=" gap-2">
+                                <button type="submit" name="login" class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -176,6 +170,43 @@ if (isset($_POST["login"])) {
     <script src="../assets/V2/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script>
+        $(function() {
+            $('#myForm').on('submit', function(e) {
+                e.preventDefault();
+                var $btn = $('#loginBtn');
+                $btn.html('<span class="spinner-border spinner-border-sm text-light me-2"></span> Loading...');
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: '', // submit ke halaman yang sama
+                    method: 'POST',
+                    data: $(this).serialize() + '&login=1',
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status === 'success') {
+                            window.location.href = res.redirect;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Login Failed',
+                                text: res.message,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#d33'
+                            });
+                            $btn.html('<i class="fas fa-sign-in-alt"></i> Sign In');
+                            $btn.prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Server error!', 'error');
+                        $btn.html('<i class="fas fa-sign-in-alt"></i> Sign In');
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {
