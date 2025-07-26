@@ -230,7 +230,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         }
 
                         if (res.status === 'success') {
-                            Swal.fire('Berhasil', res.message, 'success').then(() => {
+                            Swal.fire('Success', res.message, 'success').then(() => {
                                 window.location.href = '../nilai_cluster';
                             });
                         } else {
