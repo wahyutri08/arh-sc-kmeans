@@ -6,43 +6,6 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-// $jumlahDataPerHalaman = 10;
-// if (isset($_POST["keyword"])) {
-//     $keyword = $_POST["keyword"];
-// } else {
-//     $keyword = '';
-// }
-
-// // Cek apakah ada pencarian
-// if (!empty($keyword)) {
-//     $jumlahData = count(query("SELECT * FROM atribut WHERE 
-//             id_atribut LIKE '%$keyword%' OR
-//             nama_atribut LIKE '%$keyword%'"));
-// } else {
-//     $jumlahData = count(query("SELECT * FROM atribut"));
-// }
-
-// // Hitung halaman
-// $jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
-
-// if (isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0 && $_GET["page"] <= $jumlahHalaman) {
-//     $halamanAktif = (int)$_GET["page"];
-// } else {
-//     $halamanAktif = 1;
-// }
-
-// $startData = ($halamanAktif - 1) * $jumlahDataPerHalaman;
-
-// // Query ambil data
-// if (!empty($keyword)) {
-//     $atr = query("SELECT * FROM atribut WHERE 
-//              id_atribut LIKE '%$keyword%' OR
-//             nama_atribut LIKE '%$keyword%'
-//             LIMIT $startData, $jumlahDataPerHalaman");
-// } else {
-//     $atr = query("SELECT * FROM atribut LIMIT $startData, $jumlahDataPerHalaman");
-// }
-
 $id_user = $_SESSION["id"];
 $user_role = $_SESSION["role"];
 $reports = query("SELECT laporan.id, users.nama, users.role, laporan.tanggal_laporan FROM laporan JOIN users ON laporan.user_id = users.id WHERE users.id = '$id_user'");
@@ -116,19 +79,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <div class="card card-outline card-danger">
                                 <div class="card-header">
                                     <h3 class="card-title">Hasil Proses Perhitungan</h3>
-                                    <!-- <div class="card-tools mt-1">
-                                        <form action="" method="POST">
-                                            <div class="input-group input-group-sm" style="width: 150px;">
-                                                <input type="text" id="keyword" name="keyword" class="form-control float-right" placeholder="Search">
-
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-default">
-                                                        <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div> -->
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body table-responsive">
@@ -166,38 +116,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
-                                <!-- <div class="card-footer clearfix">
-                                    <div class="showing-entries">
-                                        <span id="showing-entries">Showing <?= ($startData + 1); ?> to <?= min($startData + $jumlahDataPerHalaman, $jumlahData); ?> of <?= $jumlahData; ?> entries</span>
-                                        <ul class="pagination pagination-sm m-0 float-right">
-                                      
-                                            <li class="page-item">
-                                                <a class="page-link" href="?page=<?= max(1, $halamanAktif - 1); ?>">Previous</a>
-                                            </li>
-
-                                            <?php
-                                            $startPage = max(1, $halamanAktif - 2);
-                                            $endPage = min($jumlahHalaman, $halamanAktif + 2);
-
-                                            if ($halamanAktif <= 3) {
-                                                $endPage = min($jumlahHalaman, 5);
-                                            }
-                                            if ($halamanAktif > $jumlahHalaman - 3) {
-                                                $startPage = max(1, $jumlahHalaman - 4);
-                                            }
-
-                                            for ($i = $startPage; $i <= $endPage; $i++) : ?>
-                                                <li class="page-item <?= $i == $halamanAktif ? 'active' : ''; ?>">
-                                                    <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
-                                                </li>
-                                            <?php endfor; ?>
-
-                                            <li class="page-item">
-                                                <a class="page-link" href="?page=<?= min($jumlahHalaman, $halamanAktif + 1); ?>">Next</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div> -->
                             </div>
                             <!-- /.card -->
                         </div>
@@ -312,21 +230,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         });
                     }
                 });
-            });
-
-            function updateShowingEntries(jumlahData, jumlahDataPerHalaman, halamanSekarang) {
-                if (jumlahData === 0) {
-                    $('#showing-entries').html('Showing 0 entries');
-                } else {
-                    var startEntry = (halamanSekarang - 1) * jumlahDataPerHalaman + 1;
-                    var endEntry = Math.min(halamanSekarang * jumlahDataPerHalaman, jumlahData);
-                    $('#showing-entries').html('Showing ' + startEntry + ' to ' + endEntry + ' of ' + jumlahData + ' entries');
-                }
-            }
-            $('#keyword').on('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
             });
         });
     </script>

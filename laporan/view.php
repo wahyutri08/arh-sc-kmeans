@@ -346,13 +346,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Instagram Footer -->
-                            <!-- <div class="row">
-                                <div class="col-12 text-center">
-                                    <small>Instagram: <a href="https://www.instagram.com/smks.binongpermai/?hl=id" target="_blank">@smks.binongpermai</a></small>
-                                </div>
-                            </div> -->
                         </div> <!-- /.col-md-12 -->
                     </div> <!-- /.row -->
                 </div> <!-- /.container-fluid -->
@@ -411,39 +404,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
-    <!-- <script>
-        $(function() {
-            $("#example1").DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "pageLength": 10,
-                "lengthMenu": [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true,
-                "responsive": false,
-                "buttons": ["excel", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "pageLength": 10,
-                "lengthMenu": [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true,
-                "responsive": false,
-            });
-        });
-    </script> -->
     <script>
         $(function() {
             $("#example1").DataTable({
