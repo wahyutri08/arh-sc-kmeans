@@ -98,6 +98,13 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="../assets/V2/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
+    <style>
+        body {
+            background-position: center;
+            background-size: cover;
+            background-image: url(../assets/dist/img/bg/bg2.jpg);
+        }
+    </style>
 </head>
 <!--end::Head-->
 <!--begin::Body-->

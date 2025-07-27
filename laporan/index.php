@@ -8,7 +8,7 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
 
 $id_user = $_SESSION["id"];
 $user_role = $_SESSION["role"];
-$reports = query("SELECT laporan.id, users.nama, users.role, laporan.tanggal_laporan FROM laporan JOIN users ON laporan.user_id = users.id WHERE users.id = '$id_user'");
+$reports = query("SELECT laporan.id, users.nama, users.role, laporan.tanggal_laporan FROM laporan JOIN users ON laporan.user_id = users.id");
 $atr = query("SELECT * FROM atribut");
 
 ?>
