@@ -1,5 +1,9 @@
 <?php
-
+if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
+    header('HTTP/1.1 403 Forbidden');
+    include("errors/404.html");
+    exit();
+}
 $db = mysqli_connect("localhost", "root", "", "dev-arh");
 
 function query($query)

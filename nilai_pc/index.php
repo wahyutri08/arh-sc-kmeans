@@ -169,6 +169,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Sweetalert -->
     <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
     <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
+    <!-- Sidebar JS -->
+    <script src="../assets/js/sidebar.js"></script>
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -238,6 +240,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
     </script>
+
 </body>
 
 </html>

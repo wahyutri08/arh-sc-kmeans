@@ -173,6 +173,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
+    <!-- Sidebar JS -->
+    <script src="../assets/js/sidebar.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
     <script>
         $(function() {
@@ -225,7 +227,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         try {
                             res = JSON.parse(response);
                         } catch (e) {
-                            Swal.fire('Error', 'Respon server tidak valid', 'error');
+                            Swal.fire('Error', 'Invalid server response', 'error');
                             return;
                         }
 
@@ -234,11 +236,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 window.location.href = '../nilai_cluster';
                             });
                         } else {
-                            Swal.fire('Gagal', res.message, 'error');
+                            Swal.fire('Failed', res.message, 'error');
                         }
                     },
                     error: function() {
-                        Swal.fire('Gagal', 'Terjadi kesalahan pada server', 'error');
+                        Swal.fire('Failed', 'An error occurred on the server', 'error');
                     }
                 });
             });

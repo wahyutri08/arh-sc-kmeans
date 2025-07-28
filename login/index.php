@@ -124,14 +124,14 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
                 <form action="" method="POST" id="myForm">
                     <div class="input-group mb-1">
                         <div class="form-floating">
-                            <input id="username" name="username" type="text" class="form-control" value="" placeholder="" required />
+                            <input id="username" name="username" type="text" class="form-control" value="" placeholder="" />
                             <label for="username">Username</label>
                         </div>
                         <div class="input-group-text"><span class="bi bi-envelope"></span></div>
                     </div>
                     <div class="input-group mb-1">
                         <div class="form-floating">
-                            <input id="password" name="password" type="password" class="form-control" placeholder="" required />
+                            <input id="password" name="password" type="password" class="form-control" placeholder="" />
                             <label for="password">Password</label>
                         </div>
                         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>

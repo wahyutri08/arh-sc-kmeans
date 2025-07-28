@@ -90,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>PC EDITING</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
+                  <i class="ion ion-laptop"></i>
                 </div>
                 <a href="#" class="small-box-footer">&nbsp;</a>
               </div>
@@ -195,6 +195,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
   <!-- AdminLTE App -->
   <script src="../assets/dist/js/adminlte.min.js"></script>
+  <!-- Sidebar JS -->
+  <script src="../assets/js/sidebar.js"></script>
 </body>
 
 </html>
