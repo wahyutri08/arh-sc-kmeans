@@ -215,9 +215,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <table id="exampleCentroidAwal" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Cluster</th>
+                                                    <th class="text-center">Cluster</th>
                                                     <?php foreach ($atribut as $atr) : ?>
-                                                        <th><?= $atr['nama_atribut']; ?></th>
+                                                        <th class="text-center"><?= $atr['nama_atribut']; ?></th>
                                                     <?php endforeach; ?>
                                                 </tr>
                                             </thead>
@@ -226,7 +226,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <tr>
                                                         <td>Cluster <?= $index + 1 ?></td>
                                                         <?php foreach ($centroid as $value) : ?>
-                                                            <td><?= number_format($value, 3) ?></td>
+                                                            <td class="text-center"><?= number_format($value, 3) ?></td>
                                                         <?php endforeach; ?>
                                                     </tr>
                                                 <?php endforeach; ?>
@@ -252,15 +252,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <table id="exampleClusterAwal" class="table table-bordered table-hover text-nowarp">
                                             <thead>
                                                 <tr>
-                                                    <th>Nama PC Editing</th>
+                                                    <th class="text-center">Nama PC Editing</th>
                                                     <?php foreach ($atribut as $atr) : ?>
-                                                        <th><?= $atr['nama_atribut']; ?></th>
+                                                        <th class="text-center"><?= $atr['nama_atribut']; ?></th>
                                                     <?php endforeach; ?>
                                                     <?php foreach ($cluster as $cls) : ?>
-                                                        <th><?= $cls['nama_cluster']; ?></th>
+                                                        <th class="text-center"><?= $cls['nama_cluster']; ?></th>
                                                     <?php endforeach; ?>
-                                                    <th>Jarak Terdekat</th>
-                                                    <th>Cluster</th>
+                                                    <th class="text-center">Jarak Terdekat</th>
+                                                    <th class="text-center">Cluster</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -269,15 +269,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <tr>
                                                             <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
                                                             <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                                <td><?= number_format($value, 3) ?></td>
+                                                                <td class="text-center"><?= number_format($value, 3) ?></td>
                                                             <?php endforeach; ?>
                                                             <?php
                                                             $distances = $initialResult['distances'][$dataIndex];
                                                             foreach ($distances as $distance) : ?>
-                                                                <td><?= number_format($distance, 3) ?></td>
+                                                                <td class="text-center"><?= number_format($distance, 3) ?></td>
                                                             <?php endforeach; ?>
-                                                            <td><?= number_format(min($distances), 3) ?></td>
-                                                            <td>Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
+                                                            <td class="text-center"><?= number_format(min($distances), 3) ?></td>
+                                                            <td class="text-center">Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
                                                         </tr>
                                                     <?php endforeach; ?>
                                                 <?php endforeach; ?>
@@ -306,18 +306,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <table id="example<?= $iteration['iteration'] ?>" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nama Cluster</th>
+                                                        <th class="text-center">Nama Cluster</th>
                                                         <?php foreach ($atribut as $atr) : ?>
-                                                            <th><?= $atr['nama_atribut']; ?></th>
+                                                            <th class="text-center"><?= $atr['nama_atribut']; ?></th>
                                                         <?php endforeach; ?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php foreach ($iteration['centroids'] as $index => $centroid) : ?>
                                                         <tr>
-                                                            <td><?= $cluster[$index]['nama_cluster'] ?></td>
+                                                            <td class="text-center"><?= $cluster[$index]['nama_cluster'] ?></td>
                                                             <?php foreach ($centroid as $value) : ?>
-                                                                <td><?= number_format($value, 3) ?></td>
+                                                                <td class="text-center"><?= number_format($value, 3) ?></td>
                                                             <?php endforeach; ?>
                                                         </tr>
                                                     <?php endforeach; ?>
@@ -335,15 +335,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <table id="exampleIterasi<?= $iteration['iteration'] ?>" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nama PC Editing</th>
+                                                        <th class="text-center">Nama PC Editing</th>
                                                         <?php foreach ($atribut as $atr) : ?>
-                                                            <th><?= $atr['nama_atribut']; ?></th>
+                                                            <th class="text-center"><?= $atr['nama_atribut']; ?></th>
                                                         <?php endforeach; ?>
                                                         <?php foreach ($cluster as $cls) : ?>
-                                                            <th><?= $cls['nama_cluster']; ?></th>
+                                                            <th class="text-center"><?= $cls['nama_cluster']; ?></th>
                                                         <?php endforeach; ?>
-                                                        <th>Jarak Terdekat</th>
-                                                        <th>Cluster</th>
+                                                        <th class="text-center">Jarak Terdekat</th>
+                                                        <th class="text-center">Cluster</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -352,7 +352,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                             <tr>
                                                                 <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
                                                                 <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                                    <td><?= number_format($value, 3) ?></td>
+                                                                    <td class="text-center"><?= number_format($value, 3) ?></td>
                                                                 <?php endforeach; ?>
 
                                                                 <?php
@@ -361,11 +361,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                                     $distances[] = calculateDistance($data[$dataIndex], $centroid);
                                                                 }
                                                                 foreach ($distances as $distance) : ?>
-                                                                    <td><?= number_format($distance, 3) ?></td>
+                                                                    <td class="text-center"><?= number_format($distance, 3) ?></td>
                                                                 <?php endforeach; ?>
 
-                                                                <td><?= number_format(min($distances), 3) ?></td>
-                                                                <td>Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
+                                                                <td class="text-center"><?= number_format(min($distances), 3) ?></td>
+                                                                <td class="text-center">Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                     <?php endforeach; ?>

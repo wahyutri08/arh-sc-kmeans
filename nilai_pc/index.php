@@ -82,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <th class="text-center">Nama PC</th>
                                                 <?php $atribut = query("SELECT *FROM atribut"); ?>
                                                 <?php foreach ($atribut as $atr) : ?>
-                                                    <th><?= $atr["nama_atribut"]; ?></th>
+                                                    <th class="text-center"><?= $atr["nama_atribut"]; ?></th>
                                                 <?php endforeach ?>
                                                 <th></th>
                                             </tr>
@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <td class="text-center"><?= $pc["id_pc"]; ?></td>
                                                     <td><?= $pc["nama_pc"]; ?></td>
                                                     <?php foreach ($atribut as $row) : ?>
-                                                        <td>
+                                                        <td class="text-center">
                                                             <?php
                                                             $nilaiPc = query("SELECT * FROM nilai_pc WHERE id_pc = " . $pc['id_pc'] . " AND id_atribut = " . $row['id_atribut']);
                                                             if ($nilaiPc) {

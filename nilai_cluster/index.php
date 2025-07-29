@@ -82,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <th class="text-center">Nama Cluster</th>
                                                 <?php $atribut = query("SELECT *FROM atribut"); ?>
                                                 <?php foreach ($atribut as $atr) : ?>
-                                                    <th><?= $atr["nama_atribut"]; ?></th>
+                                                    <th class="text-center"><?= $atr["nama_atribut"]; ?></th>
                                                 <?php endforeach ?>
                                                 <th></th>
                                             </tr>
@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <td class="text-center"><?= $cls["id_cluster"]; ?></td>
                                                     <td><?= $cls["nama_cluster"]; ?></td>
                                                     <?php foreach ($atribut as $row) : ?>
-                                                        <td>
+                                                        <td class="text-center">
                                                             <?php
                                                             $nilaiCluster = query("SELECT * FROM nilai_cluster WHERE id_cluster = " . $cls['id_cluster'] . " AND id_atribut = " . $row['id_atribut']);
                                                             if ($nilaiCluster) {
