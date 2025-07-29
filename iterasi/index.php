@@ -180,7 +180,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-solid fa-cog"></i> Submit</button>
+                                        <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-solid fa-cog"></i> Processing</button>
                                     </div>
                                 </form>
                             </div>

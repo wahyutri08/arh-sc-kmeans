@@ -102,7 +102,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
         body {
             background-position: center;
             background-size: cover;
-            background-image: url(../assets/dist/img/bg/bg2.jpg);
+            background-image: url(../assets/dist/img/bg/bg.jpg);
         }
     </style>
 </head>
