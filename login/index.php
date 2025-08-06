@@ -69,7 +69,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link rel="preload" href="../assets/V2/css/adminlte.css" as="style" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
