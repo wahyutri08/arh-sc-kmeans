@@ -125,7 +125,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
             <div class="text-bold pt-2">Processing...</div>
         </div>
-
     </div>
     <div class="wrapper">
         <!-- Navbar -->
@@ -379,20 +378,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div> <!-- end container-fluid -->
                     </section>
                 <?php endforeach; ?>
-
             <?php endif; ?>
-
         </div>
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside>
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
@@ -427,6 +417,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
     <!-- Sidebar JS -->
     <script src="../assets/js/sidebar.js"></script>
+    <!-- DarkMode -->
+    <script src="../assets/dist/js/darkmode.js"></script>
     <!-- AdminLTE App -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <!-- jQuery Validation + AJAX Submit -->

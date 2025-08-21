@@ -113,9 +113,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
+    <style>
+        .overlay {
+            position: fixed;
+            /* penting: supaya menempel di layar */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* tengah secara vertikal */
+            align-items: center;
+            /* tengah secara horizontal */
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="overlay-wrapper" id="pageLoader">
+        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
+            <div class="text-bold pt-2">Processing...</div>
+        </div>
+    </div>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -286,7 +309,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- Penjelasan Jurusan -->
                             <div class="card card-warning">
                                 <div class="card-header">
-                                    <h3 class="card-title"><span class="fas fa-award"></span> &nbsp;PENJELASAN HASIL CLUSTER</h3>
+                                    <h3 class="card-title"><span class="fas fa-info"></span> &nbsp;PENJELASAN HASIL CLUSTER</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -356,13 +379,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside>
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
@@ -389,6 +405,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="../assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="../assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- DarkMode -->
+    <script src="../assets/dist/js/darkmode.js"></script>
     <!-- ChartJS -->
     <script src="../assets/plugins/chart.js/Chart.min.js"></script>
     <!-- jQuery Knob -->
@@ -458,6 +476,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script>
         $(function() {
             $(".knob").knob();
+        });
+    </script>
+    <script>
+        $(window).on('load', function() {
+            $('#pageLoader').fadeOut(250);
         });
     </script>
 </body>

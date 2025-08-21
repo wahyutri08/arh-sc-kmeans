@@ -168,19 +168,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-      <div class="p-3">
-        <h5>Title</h5>
-        <p>Sidebar content</p>
-      </div>
-    </aside>
-    <!-- /.control-sidebar -->
-
     <!-- Main Footer -->
     <?php require_once '../partials/footer.php';  ?>
+    <!-- Control Sidebar -->
+    <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
 
@@ -195,6 +186,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
   <!-- AdminLTE App -->
   <script src="../assets/dist/js/adminlte.min.js"></script>
+  <!-- DarkMode -->
+  <script src="../assets/dist/js/darkmode.js"></script>
   <!-- Sidebar JS -->
   <script src="../assets/js/sidebar.js"></script>
 </body>

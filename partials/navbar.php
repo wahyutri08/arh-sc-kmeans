@@ -20,6 +20,12 @@
      <!-- Right navbar links -->
      <ul class="navbar-nav ml-auto">
          <li class="nav-item">
+             <div class="custom-control custom-switch nav-link">
+                 <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                 <label class="custom-control-label" for="customSwitch1">Dark Mode</label>
+             </div>
+         </li>
+         <li class="nav-item">
              <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                  <i class="fas fa-expand-arrows-alt"></i>
              </a>
