@@ -1,9 +1,38 @@
 <?php
 if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     header('HTTP/1.1 403 Forbidden');
-    include("../errors/404.html");
+    include("../errors/403.html");
     exit();
 }
+
+function currentPath()
+{
+    return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+}
+
+function currentPage()
+{
+    return basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+}
+
+function isModule($module)
+{
+    return strpos(currentPath(), $module) !== false;
+}
+
+function pathContains($paths = [])
+{
+    $current = currentPath();
+
+    foreach ($paths as $path) {
+        if (strpos($current, $path) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // sidebar.php (partial) — tidak perlu logic aktif di PHP, aktif handle by JS!
 $id = $_SESSION["id"];
 $role = $_SESSION["role"];
@@ -31,14 +60,14 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="../home" class="nav-link">
+                    <a href="<?= base_url('home') ?>" class="nav-link <?= isModule('home') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <!-- Master Data Menu -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview <?= isModule('master') ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= isModule('master') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-edit"></i>
                         <p>
                             Master Data
@@ -47,27 +76,42 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="../atribut" class="nav-link">
+                            <a href="<?= base_url('master/atribut') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'master/atribut',
+                                                    'master/add_atribut',
+                                                    'master/edit_atribut'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Atribut</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../nama_pc" class="nav-link">
+                            <a href="<?= base_url('master/pc_editing') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'master/pc_editing',
+                                                    'master/add_pc',
+                                                    'master/edit_pc'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data PC Editing</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../cluster" class="nav-link">
+                            <a href="<?= base_url('master/cluster') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'master/cluster',
+                                                    'master/add_cluster',
+                                                    'master/edit_cluster'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Cluster</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview <?= isModule('nilaiData') ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= isModule('nilaiData') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             Nilai Data
@@ -76,15 +120,23 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="../nilai_pc" class="nav-link">
+                            <a href="<?= base_url('nilaiData/nilai_data_pc') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'nilaiData/nilai_data_pc',
+                                                    'nilaiData/edit_nilaipc'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Nilai Data PC</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../nilai_cluster" class="nav-link">
+                            <a href="<?= base_url('nilaiData/nilai_data_cluster') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'nilaiData/nilai_data_cluster',
+                                                    'nilaiData/edit_nilaicluster'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Nilai Cluster</p>
+                                <p>Nilai Data Cluster</p>
                             </a>
                         </li>
                     </ul>

@@ -4,28 +4,42 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     include("errors/404.html");
     exit();
 }
-$db = mysqli_connect("localhost", "root", "", "dev-arh");
+$db = mysqli_connect("localhost", "root", "", "dev-arh2");
+
+
+define("BASEURL", "http://localhost/arh-sc-kmeans/");
+
+// Fungsi helper base_url
+function base_url($path = "")
+{
+    return BASEURL . $path;
+}
 
 function query($query)
 {
     global $db;
-    $result = mysqli_query($db, $query);
-    $rows = [];
 
-    // Periksa apakah query berhasil dieksekusi
-    if ($result) {
-        if (mysqli_num_rows($result) > 0) {
-            // Loop melalui hasil query
-            while ($row = mysqli_fetch_assoc($result)) {
-                $rows[] = $row; // Menambahkan baris hasil ke dalam array $rows
-            }
-        }
-    } else {
-        echo "Error: " . mysqli_error($db);
+    $result = mysqli_query($db, $query);
+
+    if (!$result) {
+        // 🔥 tampilkan error tapi tidak mematikan sistem
+        echo "SQL Error: " . mysqli_error($db);
+        return [];
     }
 
-    return $rows;
+    // 🔥 cek apakah SELECT
+    if (stripos(trim($query), 'SELECT') === 0) {
+        $rows = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    // 🔥 untuk INSERT/UPDATE/DELETE
+    return true;
 }
+
 
 function register($data)
 {

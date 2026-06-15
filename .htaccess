@@ -1,15 +1,69 @@
-# Nonaktifkan directory listing
-
+# ======================================
+# Disable directory listing
+# ======================================
 Options -Indexes
 
+# ======================================
+# Enable rewrite
+# ======================================
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME}.php -f
+
+RewriteRule ^master/edit_atribut/([0-9]+)$ master/edit_atribut.php?id_atribut=$1 [L,QSA]
+RewriteRule ^master/delete_atribut/([0-9]+)$ master/delete_atribut.php?id_atribut=$1 [L,QSA]
+RewriteRule ^master/edit_pc/([0-9]+)$ master/edit_pc.php?id_pc=$1 [L,QSA]
+RewriteRule ^master/delete_pc/([0-9]+)$ master/delete_pc.php?id_pc=$1 [L,QSA]
+RewriteRule ^master/edit_cluster/([0-9]+)$ master/edit_cluster.php?id_cluster=$1 [L,QSA]
+RewriteRule ^master/delete_cluster/([0-9]+)$ master/delete_cluster.php?id_cluster=$1 [L,QSA]
+RewriteRule ^nilaiData/edit_nilaipc/([0-9]+)$ nilaiData/edit_nilaipc.php?id_pc=$1 [L,QSA]
+RewriteRule ^nilaiData/delete_nilaipc/([0-9]+)$ nilaiData/delete_nilaipc.php?id_pc=$1 [L,QSA]
+RewriteRule ^nilaiData/edit_nilaicluster/([0-9]+)$ nilaiData/edit_nilaicluster.php?id_cluster=$1 [L,QSA]
+RewriteRule ^nilaiData/delete_nilaicluster/([0-9]+)$ nilaiData/delete_nilaicluster.php?id_cluster=$1 [L,QSA]
+RewriteRule ^type_settings/member_bank/edit/([0-9]+)$ type_settings/member_bank/edit.php?id_member=$1 [L,QSA]
+RewriteRule ^type_settings/member_bank/delete/([0-9]+)$ type_settings/member_bank/delete.php?id_member=$1 [L,QSA]
+RewriteRule ^user_management/edit/([0-9]+)$ user_management/edit.php?id=$1 [L,QSA]
+RewriteRule ^user_management/delete/([0-9]+)$ user_management/delete.php?id=$1 [L,QSA]
+RewriteRule ^myassets/edit/([0-9]+)$ myassets/edit.php?id_stock=$1 [L,QSA]
+RewriteRule ^myassets/delete/([0-9]+)$ myassets/delete.php?id_stock=$1 [L,QSA]
+RewriteRule ^myassets/history/([0-9]+)$ myassets/history.php?id_stock=$1 [L,QSA]
+
+# ======================================
+# Remove .php extension
+# ======================================
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L]
 
+# ======================================
+# Redirect index.php
+# ======================================
+RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+RewriteRule ^index\.php$ / [R=301,L]
 
-# Custom error pages
+# ======================================
+# Protect sensitive files
+# ======================================
+RewriteRule ^config/ - [F,L]
+RewriteRule ^\.env - [F,L]
+RewriteRule ^composer\.(json|lock)$ - [F,L]
+RewriteRule ^\.git - [F,L]
 
+<Files .htaccess>
+Order Allow,Deny
+Deny from all
+</Files>
 
-ErrorDocument 403 /error/error-403.html
-ErrorDocument 404 error/error-404.html
-ErrorDocument 500 /error/500.html
+# ======================================
+# Security headers
+# ======================================
+<IfModule mod_headers.c>
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# ======================================
+# Error pages
+# ======================================
+ErrorDocument 403 /app-stock-edc/error/error-403.html
+ErrorDocument 404 /app-stock-edc/error/error-404.html
+ErrorDocument 500 /app-stock-edc/error/error-500.html

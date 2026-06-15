@@ -22,30 +22,13 @@ $totalPc = $query[0]['total_pc'];
 $totalAtribut = $query[0]['total_atribut'];
 $totalCluster = $query[0]['total_cluster'];
 $totalUsers = $query[0]['total_users'];
+
+$title = "Dashboard";
+require_once '../partials/header.php';
 ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-</head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+  <?php include '../partials/overlay.php'; ?>
   <div class="wrapper">
 
     <!-- Navbar -->
@@ -177,19 +160,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- REQUIRED SCRIPTS -->
 
-  <!-- jQuery -->
-  <script src="../assets/plugins/jquery/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- Sweetalert -->
-  <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-  <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-  <!-- AdminLTE App -->
-  <script src="../assets/dist/js/adminlte.min.js"></script>
-  <!-- DarkMode -->
-  <script src="../assets/dist/js/darkmode.js"></script>
-  <!-- Sidebar JS -->
-  <script src="../assets/js/sidebar.js"></script>
+  <!-- REQUIRED SCRIPTS -->
+  <?php require_once '../partials/scripts.php'; ?>
 </body>
 
 </html>
