@@ -27,7 +27,7 @@ if ($cekPc) {
 
     echo json_encode([
         'status' => 'error',
-        'message' => 'PC ini sudah digunakan sebagai centroid cluster.'
+        'message' => 'PC Ini Sudah Digunakan Sebagai Centroid Cluster.'
     ]);
     exit;
 }
@@ -47,7 +47,7 @@ if (!$nilaiPc) {
 
     echo json_encode([
         'status' => 'error',
-        'message' => 'Data PC tidak ditemukan.'
+        'message' => 'Data PC Tidak Ditemukan.'
     ]);
     exit;
 }

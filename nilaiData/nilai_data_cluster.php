@@ -85,13 +85,15 @@ require_once '../partials/header.php';
                                                     <?php endforeach; ?>
                                                     <td class="text-center">
                                                         <div class="dropdown">
-                                                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
-                                                                Action
+                                                            <button class="btn btn-danger btn-sm tombol-hapus"
+                                                                data-id="<?= $cls['id_cluster']; ?>"
+                                                                type="button">
+                                                                <i class="far fa-trash-alt"></i>
                                                             </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                            <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                                 <li><a class="dropdown-item" href="<?= base_url('nilaiData/edit_nilaicluster/' . $cls['id_cluster']) ?>"><i class="fas fa-edit"></i> Edit</a></li>
                                                                 <li><a class="dropdown-item tombol-hapus" href="<?= base_url('nilaiData/delete_nilaicluster/' . $cls['id_cluster']) ?>"><i class="far fa-trash-alt"></i> Delete</a></li>
-                                                            </ul>
+                                                            </ul> -->
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -226,147 +228,126 @@ require_once '../partials/header.php';
         });
     </script>
     <script>
-        $(document).ready(function() {
-            $('.tombol-hapus').on('click', function(e) {
-                e.preventDefault();
-                const href = $(this).attr('href');
+        $(document).on('click', '.tombol-hapus', function(e) {
+            e.preventDefault();
+            const id_cluster = $(this).data('id');
+            Swal.fire({
+                title: 'Apa Kamu Yakin?',
+                text: "Data Akan Dihapus",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Hapus Saja!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "<?= base_url('nilaiData/delete_nilaicluster') ?>",
+                        type: "POST",
+                        data: {
+                            id_cluster: id_cluster
+                        },
+                        dataType: "json", // 🔥 penting
+                        beforeSend: function() {
+                            $('#pageLoader').show();
+                        },
+                        success: function(res) {
+                            if (res.status === 'success') {
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Data Will Be Deleted",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.value) {
-                        $.ajax({
-                            url: href,
-                            type: 'GET',
-                            success: function(response) {
-                                let res = JSON.parse(response);
-                                if (res.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: 'Data Successfully Deleted',
-                                        icon: 'success',
-                                        showConfirmButton: true,
-                                    }).then(() => {
-                                        window.location.href = '<?= base_url('nilaiData/nilai_data_cluster') ?>';
-                                    });
-                                } else if (res.status === 'error') {
-                                    Swal.fire('Error', 'Data Deletion Failed', 'error');
-                                } else if (res.status === 'redirect') {
-                                    window.location.href = '<?= base_url('logout') ?>';
-                                }
-                            },
-                            error: function() {
-                                Swal.fire('Error', 'An Error Occurred on the Server', 'error');
+                                Swal.fire(
+                                    'Dihapus!',
+                                    'Data Berhasil Dihapus',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', res.message, 'error');
                             }
-                        });
-                    }
-                });
+                        },
+                        complete: function() {
+                            $('#pageLoader').hide(); // 🔥 pasti hilang
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                            Swal.fire(
+                                'Server Error',
+                                'Check console for error',
+                                'error'
+                            );
+                        }
+                    });
+                }
             });
         });
     </script>
     <script>
         $(document).on('click', '.btn-tambah-cluster', function() {
-
             let id_pc = $(this).data('id');
             let nama_pc = $(this).data('nama');
-
             $.ajax({
                 url: "<?= base_url('nilaiData/get_cluster_tujuan') ?>",
                 type: "POST",
-
                 success: function(response) {
-
                     let res = JSON.parse(response);
-
                     if (res.status == 'redirect') {
-
                         window.location.href = "<?= base_url('logout') ?>";
                         return;
                     }
-
                     if (res.status == 'error') {
-
                         Swal.fire({
                             icon: 'warning',
                             title: 'Peringatan',
                             text: res.message
                         });
-
                         return;
                     }
-
                     Swal.fire({
                         title: 'Konfirmasi',
                         text: 'Tambah "' + nama_pc + '" ke ' + res.nama_cluster + ' ?',
                         icon: 'question',
                         showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
                         confirmButtonText: 'Ya',
                         cancelButtonText: 'Batal'
-
                     }).then((result) => {
-
                         if (result.isConfirmed) {
-
                             $.ajax({
-
                                 url: "<?= base_url('nilaiData/add_to_cluster') ?>",
                                 type: "POST",
-
                                 data: {
                                     id_pc: id_pc,
                                     id_cluster: res.id_cluster
                                 },
-
                                 success: function(r) {
-
                                     let hasil = JSON.parse(r);
-
                                     if (hasil.status == 'redirect') {
-
                                         window.location.href = "<?= base_url('logout') ?>";
                                         return;
                                     }
-
                                     if (hasil.status == 'success') {
-
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Berhasil',
-                                            text: nama_pc + ' berhasil ditambahkan ke ' + res.nama_cluster
+                                            text: nama_pc + ' Berhasil Ditambahkan Ke ' + res.nama_cluster
                                         }).then(() => {
-
                                             location.reload();
-
                                         });
-
                                     } else {
-
                                         Swal.fire({
                                             icon: 'warning',
                                             title: 'Peringatan',
                                             text: hasil.message
                                         });
-
                                     }
-
                                 }
-
                             });
-
                         }
-
                     });
-
                 }
-
             });
-
         });
     </script>
     <script>

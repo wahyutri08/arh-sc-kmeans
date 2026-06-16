@@ -24,7 +24,7 @@ if (!$cluster) {
 
     echo json_encode([
         'status' => 'error',
-        'message' => 'Semua cluster sudah terisi'
+        'message' => 'Semua Cluster Sudah Terisi'
     ]);
 
     exit;

@@ -142,8 +142,8 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </ul>
                 </li>
                 <li class="nav-header">PERHITUNGAN</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview <?= isModule('proses') ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= isModule('proses') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Proses
@@ -152,7 +152,10 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="../iterasi" class="nav-link">
+                            <a href="<?= base_url('proses/iterasi') ?>"
+                                class="nav-link <?= pathContains([
+                                                    'proses/iterasi'
+                                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Iterasi</p>
                             </a>

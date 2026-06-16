@@ -57,10 +57,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
             white-space: normal;
             word-break: break-word;
         } */
+        /* #example2,
+        #example3,
+        #exampleCentroidAwal,
+        #exampleClusterAwal,
+        #example,
+        #exampleIterasi th,
         #example2,
-        #example3 th,
-        #example2,
-        #example3 td {
+        #example3,
+        #exampleCentroidAwal,
+        #exampleClusterAwal,
+        #example,
+        #exampleIterasi td {
+            white-space: nowrap;
+        } */
+        .table th,
+        .table td {
             white-space: nowrap;
         }
 
