@@ -33,6 +33,17 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
 }
 ob_start();
 
+function formatNilai($nilai)
+{
+    return rtrim(
+        rtrim(
+            number_format((float)$nilai, 3, '.', ''),
+            '0'
+        ),
+        '.'
+    );
+}
+
 try {
 
     // Cek centroid kosong
@@ -148,6 +159,7 @@ try {
     }
 
 ?>
+
     <!-- SECTION: CENTROID AWAL -->
     <section class="content">
         <div class="container-fluid">
@@ -176,7 +188,7 @@ try {
                                         <tr>
                                             <td>Cluster <?= $index + 1 ?></td>
                                             <?php foreach ($centroid as $value) : ?>
-                                                <td class="text-center"><?= number_format($value, 3) ?></td>
+                                                <td class="text-center"><?= formatNilai($value) ?></td>
                                             <?php endforeach; ?>
                                         </tr>
                                     <?php endforeach; ?>
@@ -219,14 +231,14 @@ try {
                                             <tr>
                                                 <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
                                                 <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                    <td class="text-center"><?= number_format($value, 3) ?></td>
+                                                    <td class="text-center"><?= formatNilai($value) ?></td>
                                                 <?php endforeach; ?>
                                                 <?php
                                                 $distances = $initialResult['distances'][$dataIndex];
                                                 foreach ($distances as $distance) : ?>
-                                                    <td class="text-center"><?= number_format($distance, 3) ?></td>
+                                                    <td class="text-center"><?= formatNilai($distance) ?></td>
                                                 <?php endforeach; ?>
-                                                <td class="text-center"><?= number_format(min($distances), 3) ?></td>
+                                                <td class="text-center"><?= formatNilai(min($distances)) ?></td>
                                                 <td class="text-center">Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -267,7 +279,7 @@ try {
                                             <tr>
                                                 <td class="text-center"><?= $cluster[$index]['nama_cluster'] ?></td>
                                                 <?php foreach ($centroid as $value) : ?>
-                                                    <td class="text-center"><?= number_format($value, 3) ?></td>
+                                                    <td class="text-center"><?= formatNilai($value) ?></td>
                                                 <?php endforeach; ?>
                                             </tr>
                                         <?php endforeach; ?>
@@ -302,7 +314,7 @@ try {
                                                 <tr>
                                                     <td><?= $nama_pc[$dataIndex]['nama_pc'] ?? 'N/A' ?></td>
                                                     <?php foreach ($data[$dataIndex] as $value) : ?>
-                                                        <td class="text-center"><?= number_format($value, 3) ?></td>
+                                                        <td class="text-center"><?= formatNilai($value) ?></td>
                                                     <?php endforeach; ?>
 
                                                     <?php
@@ -311,10 +323,10 @@ try {
                                                         $distances[] = calculateDistance($data[$dataIndex], $centroid);
                                                     }
                                                     foreach ($distances as $distance) : ?>
-                                                        <td class="text-center"><?= number_format($distance, 3) ?></td>
+                                                        <td class="text-center"><?= formatNilai($distance) ?></td>
                                                     <?php endforeach; ?>
 
-                                                    <td class="text-center"><?= number_format(min($distances), 3) ?></td>
+                                                    <td class="text-center"><?= formatNilai(min($distances)) ?></td>
                                                     <td class="text-center">Cluster <?= array_search(min($distances), $distances) + 1 ?></td>
                                                 </tr>
                                             <?php endforeach; ?>

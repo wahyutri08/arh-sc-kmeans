@@ -34,6 +34,14 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 <script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
+<!-- DarkMode -->
+<script src="<?= base_url('assets/dist/js/darkmode.js') ?>"></script>
+<!-- ChartJS -->
+<script src="<?= base_url('assets/plugins/chart.js/Chart.min.js') ?>"></script>
+<!-- jQuery Knob -->
+<script src="<?= base_url('assets/plugins/jquery-knob/jquery.knob.min.js') ?>"></script>
+<!-- Sparkline -->
+<script src="<?= base_url('assets/plugins/sparklines/sparkline.js') ?>"></script>
 <!-- AdminLTE App -->
 <script src="<?= base_url('assets/dist/js/adminlte.min.js') ?>"></script>
 <!-- Toaster -->
@@ -41,6 +49,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 <!-- dropzonejs -->
 <script src="<?= base_url('assets/plugins/dropzone/min/dropzone.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/sweetalert/sweetalert2.all.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/logoutsweetalert.js') ?>"></script>
+<!-- Logout Sweetalert -->
+<script src="<?= base_url('assets/plugins/jslogout/logoutsweetalert.js') ?>"></script>
 <!-- Overlay -->
 <script src="<?= base_url('assets/js/overlay.js') ?>"></script>

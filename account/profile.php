@@ -23,54 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit;
 }
 
+$title = "Profile - {$users['nama']}";
+require_once '../partials/header.php';
 ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Profile - <?= $users["nama"]; ?></title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-    <!-- <link href="../assets/plugins/fontawesome-free/css/fontawesome.css" rel="stylesheet" />
-  <link href="../assets/plugins/fontawesome-free/css/brands.css" rel="stylesheet" />
-  <link href="../assets/plugins/fontawesome-free/css/solid.css" rel="stylesheet" /> -->
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-    <style>
-        .overlay {
-            position: fixed;
-            /* penting: supaya menempel di layar */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* tengah secara vertikal */
-            align-items: center;
-            /* tengah secara horizontal */
-        }
-    </style>
-</head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="overlay-wrapper" id="pageLoader">
-        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Processing...</div>
-        </div>
-    </div>
+    <?php include '../partials/overlay.php'; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -92,10 +50,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item">Settings</li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
+                                <li class="breadcrumb-item">Account</li>
                                 <li class="breadcrumb-item">Profile</li>
-                                <li class="breadcrumb-item active"><?= $users["nama"]; ?></li>
+                                <li class="breadcrumb-item active"><?= htmlspecialchars($users["nama"]); ?></li>
                             </ol>
                         </div>
                     </div>
@@ -113,11 +71,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="card-body box-profile">
                                     <div class="text-center">
                                         <img class="profile-user-img img-fluid img-circle"
-                                            src="../assets/dist/img/profile/<?= $users["avatar"]; ?>"
+                                            src="<?= base_url('assets/dist/img/profile/' . htmlspecialchars($users['avatar'])); ?>"
                                             style="width: 150px; height: 140px;">
                                     </div>
-                                    <h3 class="profile-username text-center"><?= $users["nama"]; ?></h3>
-                                    <p class="text-muted text-center"><?= $users["role"]; ?></p>
+                                    <h3 class="profile-username text-center"><?= htmlspecialchars($users["nama"]); ?></h3>
+                                    <p class="text-muted text-center"><?= htmlspecialchars($users["role"]); ?></p>
                                 </div>
                             </div>
                             <!-- /.card -->
@@ -136,24 +94,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="tab-content">
                                         <div class="active tab-pane" id="settings">
                                             <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data" id="myForm">
-                                                <input type="hidden" name="id" value="<?= $users["id"]; ?>">
-                                                <input type="hidden" name="avatarLama" value="<?= $users["avatar"]; ?>">
+                                                <input type="hidden" name="id" value="<?= htmlspecialchars($users["id"]); ?>">
+                                                <input type="hidden" name="avatarLama" value="<?= htmlspecialchars($users["avatar"]); ?>">
                                                 <div class="form-group row">
                                                     <label for="username" class="col-sm-2 col-form-label">Username <span class="text-danger">*</span></label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" placeholder="Username" value="<?= $users["username"]; ?>" disabled>
+                                                        <input type="text" class="form-control" placeholder="Username" value="<?= htmlspecialchars($users["username"]); ?>" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="email" class="col-sm-2 col-form-label">Email <span class="text-danger">*</span></label>
                                                     <div class="col-sm-10">
-                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?= $users["email"]; ?>">
+                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?= htmlspecialchars($users["email"]); ?>">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="nama" class="col-sm-2 col-form-label">Nama <span class="text-danger">*</span></label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="nama" name="nama" placeholder="Name" value="<?= $users["nama"]; ?>">
+                                                        <input type="text" class="form-control" id="nama" name="nama" placeholder="Name" value="<?= htmlspecialchars($users["nama"]); ?>">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -197,22 +155,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <?php require_once '../partials/scripts.php'; ?>
 
-    <!-- jQuery -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- bs-custom-file-input -->
-    <script src="../assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-    <!-- DarkMode -->
-    <script src="../assets/dist/js/darkmode.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-    <!-- Sidebar JS -->
-    <script src="../assets/js/sidebar.js"></script>
     <script>
         $(function() {
             bsCustomFileInput.init();
@@ -237,7 +181,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 text: res.message,
                                 icon: "success"
                             }).then(() => {
-                                window.location.href = '../profile';
+                                window.location.href = '<?= base_url('account/profile') ?>';
                             });
                         } else {
                             Swal.fire('Error', res.message, 'error');

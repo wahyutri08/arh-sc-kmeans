@@ -739,90 +739,269 @@ function getInitialClusters($data, $initialCentroids)
     ];
 }
 
-function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport, $nama_pc, $data, $atribut, $actualIterations)
-{
+// jika erorr gunakan function ini
+// function simpanhasilakhir($centroids, $clusters, $history, $id_user, $dateReport, $nama_pc, $data, $atribut, $actualIterations)
+// {
+//     global $db;
+
+//     $dateReport = date('Y-m-d');
+
+//     // Escape input
+//     $id_user = mysqli_real_escape_string($db, $id_user);
+//     $dateReport = mysqli_real_escape_string($db, $dateReport);
+//     $actualIterations = mysqli_real_escape_string($db, $actualIterations);
+
+//     // Cek laporan
+//     $query = "SELECT id FROM laporan WHERE user_id = '$id_user' AND jumlah_iterasi = '$actualIterations'";
+//     $result = mysqli_query($db, $query);
+
+//     if ($result && mysqli_num_rows($result) == 0) {
+//         $query = "INSERT INTO laporan (user_id, tanggal_laporan, jumlah_iterasi) VALUES ('$id_user', '$dateReport', '$actualIterations')";
+//         if (mysqli_query($db, $query)) {
+//             $id_laporan = mysqli_insert_id($db);
+//         } else {
+//             error_log("Gagal insert ke laporan: " . mysqli_error($db));
+//             return 0;
+//         }
+//     } elseif ($result) {
+//         $row = mysqli_fetch_assoc($result);
+//         $id_laporan = $row['id'];
+//     } else {
+//         error_log("Gagal query laporan: " . mysqli_error($db));
+//         return 0;
+//     }
+
+//     // Proses laporan_hasil_akhir
+//     foreach ($clusters as $clusterId => $clusterData) {
+//         foreach ($clusterData as $dataIndex) {
+//             $nama_pc_value = mysqli_real_escape_string($db, $nama_pc[$dataIndex]['nama_pc']);
+//             $nama_cluster = mysqli_real_escape_string($db, 'Cluster ' . ($clusterId + 1));
+
+//             $query = "SELECT id FROM laporan_hasil_akhir WHERE id_laporan = '$id_laporan' AND nama_pc = '$nama_pc_value' AND nama_cluster = '$nama_cluster'";
+//             $result = mysqli_query($db, $query);
+
+//             if ($result && mysqli_num_rows($result) == 0) {
+//                 $query = "INSERT INTO laporan_hasil_akhir (id_laporan, nama_pc, nama_cluster) VALUES ('$id_laporan', '$nama_pc_value', '$nama_cluster')";
+//                 if (mysqli_query($db, $query)) {
+//                     $id_laporan_hasil_akhir = mysqli_insert_id($db);
+//                 } else {
+//                     error_log("Gagal insert ke laporan_hasil_akhir: " . mysqli_error($db));
+//                     return 0;
+//                 }
+//             } elseif ($result) {
+//                 $row = mysqli_fetch_assoc($result);
+//                 $id_laporan_hasil_akhir = $row['id'];
+//             } else {
+//                 error_log("Gagal query laporan_hasil_akhir: " . mysqli_error($db));
+//                 return 0;
+//             }
+
+//             // Proses atribut
+//             foreach ($data[$dataIndex] as $attrIndex => $value) {
+//                 $nama_atribut = mysqli_real_escape_string($db, $atribut[$attrIndex]['nama_atribut']);
+//                 $nilai = (fmod($value, 1) != 0)
+//                     ? number_format($value, 2, '.', '')
+//                     : number_format($value, 0, '.', '');
+//                 $nilai = mysqli_real_escape_string($db, $nilai);
+
+//                 $query = "SELECT id FROM laporan_hasil_akhir_atribut WHERE id_laporan_hasil_akhir = '$id_laporan_hasil_akhir' AND nama_atribut = '$nama_atribut' AND nilai = '$nilai'";
+//                 $result = mysqli_query($db, $query);
+
+//                 if ($result && mysqli_num_rows($result) == 0) {
+//                     $query = "INSERT INTO laporan_hasil_akhir_atribut (id_laporan_hasil_akhir, nama_atribut, nilai) VALUES ('$id_laporan_hasil_akhir', '$nama_atribut', '$nilai')";
+//                     if (!mysqli_query($db, $query)) {
+//                         error_log("Gagal insert atribut: " . mysqli_error($db));
+//                         return 0;
+//                     }
+//                 } elseif (!$result) {
+//                     error_log("Gagal query atribut: " . mysqli_error($db));
+//                     return 0;
+//                 }
+//             }
+//         }
+//     }
+
+//     return 1;
+// }
+
+function simpanhasilakhir(
+    $centroids,
+    $clusters,
+    $history,
+    $id_user,
+    $dateReport,
+    $nama_pc,
+    $data,
+    $atribut,
+    $actualIterations
+) {
     global $db;
 
-    $dateReport = date('Y-m-d');
+    try {
 
-    // Escape input
-    $id_user = mysqli_real_escape_string($db, $id_user);
-    $dateReport = mysqli_real_escape_string($db, $dateReport);
-    $actualIterations = mysqli_real_escape_string($db, $actualIterations);
+        mysqli_begin_transaction($db);
 
-    // Cek laporan
-    $query = "SELECT id FROM laporan WHERE user_id = '$id_user' AND jumlah_iterasi = '$actualIterations'";
-    $result = mysqli_query($db, $query);
+        $id_user = (int)$id_user;
+        $actualIterations = (int)$actualIterations;
+        $dateReport = date('Y-m-d H:i:s');
 
-    if ($result && mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO laporan (user_id, tanggal_laporan, jumlah_iterasi) VALUES ('$id_user', '$dateReport', '$actualIterations')";
-        if (mysqli_query($db, $query)) {
-            $id_laporan = mysqli_insert_id($db);
-        } else {
-            error_log("Gagal insert ke laporan: " . mysqli_error($db));
-            return 0;
+        /*
+        |--------------------------------------------------------------------------
+        | INSERT LAPORAN
+        |--------------------------------------------------------------------------
+        */
+
+        $query = "
+            INSERT INTO laporan (
+                user_id,
+                tanggal_laporan,
+                jumlah_iterasi
+            ) VALUES (
+                '$id_user',
+                '$dateReport',
+                '$actualIterations'
+            )
+        ";
+
+        if (!mysqli_query($db, $query)) {
+            throw new Exception(
+                "Gagal insert laporan : " .
+                    mysqli_error($db)
+            );
         }
-    } elseif ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $id_laporan = $row['id'];
-    } else {
-        error_log("Gagal query laporan: " . mysqli_error($db));
+
+        $id_laporan = mysqli_insert_id($db);
+
+        /*
+        |--------------------------------------------------------------------------
+        | INSERT HASIL CLUSTERING
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($clusters as $clusterId => $clusterData) {
+
+            foreach ($clusterData as $dataIndex) {
+
+                $nama_pc_value = mysqli_real_escape_string(
+                    $db,
+                    $nama_pc[$dataIndex]['nama_pc']
+                );
+
+                $nama_cluster = mysqli_real_escape_string(
+                    $db,
+                    'Cluster ' . ($clusterId + 1)
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | INSERT laporan_hasil_akhir
+                |--------------------------------------------------------------------------
+                */
+
+                $query = "
+                    INSERT INTO laporan_hasil_akhir (
+                        id_laporan,
+                        nama_pc,
+                        nama_cluster
+                    ) VALUES (
+                        '$id_laporan',
+                        '$nama_pc_value',
+                        '$nama_cluster'
+                    )
+                ";
+
+                if (!mysqli_query($db, $query)) {
+                    throw new Exception(
+                        "Gagal insert laporan_hasil_akhir : " .
+                            mysqli_error($db)
+                    );
+                }
+
+                $id_laporan_hasil_akhir = mysqli_insert_id($db);
+
+                /*
+                |--------------------------------------------------------------------------
+                | INSERT ATRIBUT
+                |--------------------------------------------------------------------------
+                */
+
+                foreach ($data[$dataIndex] as $attrIndex => $value) {
+
+                    $nama_atribut = mysqli_real_escape_string(
+                        $db,
+                        $atribut[$attrIndex]['nama_atribut']
+                    );
+
+                    if (fmod($value, 1) != 0) {
+                        $nilai = number_format(
+                            $value,
+                            2,
+                            '.',
+                            ''
+                        );
+                    } else {
+                        $nilai = number_format(
+                            $value,
+                            0,
+                            '.',
+                            ''
+                        );
+                    }
+
+                    $nilai = mysqli_real_escape_string(
+                        $db,
+                        $nilai
+                    );
+
+                    $query = "
+                        INSERT INTO laporan_hasil_akhir_atribut (
+                            id_laporan_hasil_akhir,
+                            nama_atribut,
+                            nilai
+                        ) VALUES (
+                            '$id_laporan_hasil_akhir',
+                            '$nama_atribut',
+                            '$nilai'
+                        )
+                    ";
+
+                    if (!mysqli_query($db, $query)) {
+                        throw new Exception(
+                            "Gagal insert atribut : " .
+                                mysqli_error($db)
+                        );
+                    }
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | COMMIT
+        |--------------------------------------------------------------------------
+        */
+
+        mysqli_commit($db);
+
+        return 1;
+    } catch (Exception $e) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ROLLBACK
+        |--------------------------------------------------------------------------
+        */
+
+        mysqli_rollback($db);
+
+        error_log(
+            'simpanhasilakhir(): ' .
+                $e->getMessage()
+        );
+
         return 0;
     }
-
-    // Proses laporan_hasil_akhir
-    foreach ($clusters as $clusterId => $clusterData) {
-        foreach ($clusterData as $dataIndex) {
-            $nama_pc_value = mysqli_real_escape_string($db, $nama_pc[$dataIndex]['nama_pc']);
-            $nama_cluster = mysqli_real_escape_string($db, 'Cluster ' . ($clusterId + 1));
-
-            $query = "SELECT id FROM laporan_hasil_akhir WHERE id_laporan = '$id_laporan' AND nama_pc = '$nama_pc_value' AND nama_cluster = '$nama_cluster'";
-            $result = mysqli_query($db, $query);
-
-            if ($result && mysqli_num_rows($result) == 0) {
-                $query = "INSERT INTO laporan_hasil_akhir (id_laporan, nama_pc, nama_cluster) VALUES ('$id_laporan', '$nama_pc_value', '$nama_cluster')";
-                if (mysqli_query($db, $query)) {
-                    $id_laporan_hasil_akhir = mysqli_insert_id($db);
-                } else {
-                    error_log("Gagal insert ke laporan_hasil_akhir: " . mysqli_error($db));
-                    return 0;
-                }
-            } elseif ($result) {
-                $row = mysqli_fetch_assoc($result);
-                $id_laporan_hasil_akhir = $row['id'];
-            } else {
-                error_log("Gagal query laporan_hasil_akhir: " . mysqli_error($db));
-                return 0;
-            }
-
-            // Proses atribut
-            foreach ($data[$dataIndex] as $attrIndex => $value) {
-                $nama_atribut = mysqli_real_escape_string($db, $atribut[$attrIndex]['nama_atribut']);
-                $nilai = (fmod($value, 1) != 0)
-                    ? number_format($value, 2, '.', '')
-                    : number_format($value, 0, '.', '');
-                $nilai = mysqli_real_escape_string($db, $nilai);
-
-                $query = "SELECT id FROM laporan_hasil_akhir_atribut WHERE id_laporan_hasil_akhir = '$id_laporan_hasil_akhir' AND nama_atribut = '$nama_atribut' AND nilai = '$nilai'";
-                $result = mysqli_query($db, $query);
-
-                if ($result && mysqli_num_rows($result) == 0) {
-                    $query = "INSERT INTO laporan_hasil_akhir_atribut (id_laporan_hasil_akhir, nama_atribut, nilai) VALUES ('$id_laporan_hasil_akhir', '$nama_atribut', '$nilai')";
-                    if (!mysqli_query($db, $query)) {
-                        error_log("Gagal insert atribut: " . mysqli_error($db));
-                        return 0;
-                    }
-                } elseif (!$result) {
-                    error_log("Gagal query atribut: " . mysqli_error($db));
-                    return 0;
-                }
-            }
-        }
-    }
-
-    return 1;
 }
-
 
 function deleteReport($id)
 {

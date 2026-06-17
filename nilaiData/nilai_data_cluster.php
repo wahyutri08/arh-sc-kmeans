@@ -6,7 +6,17 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-$cluster = query("SELECT * FROM cluster");
+$cluster = query("SELECT DISTINCT
+                  c.id_cluster,
+                  c.nama_cluster,
+                  np.nama_pc
+                  FROM cluster c
+                  LEFT JOIN nilai_cluster nc
+                  ON c.id_cluster = nc.id_cluster
+                  LEFT JOIN nama_pc np
+                  ON nc.id_pc = np.id_pc
+                  ORDER BY c.id_cluster");
+
 $nama_pc = query("SELECT * FROM nama_pc");
 
 $title = "Nilai Data Cluster";
@@ -59,6 +69,7 @@ require_once '../partials/header.php';
                                             <tr>
                                                 <th class="text-center">ID</th>
                                                 <th class="text-center">Nama Cluster</th>
+                                                <th class="text-center">Nama PC</th>
                                                 <?php $atribut = query("SELECT *FROM atribut"); ?>
                                                 <?php foreach ($atribut as $atr) : ?>
                                                     <th class="text-center"><?= $atr["nama_atribut"]; ?></th>
@@ -71,6 +82,7 @@ require_once '../partials/header.php';
                                                 <tr>
                                                     <td class="text-center"><?= $cls["id_cluster"]; ?></td>
                                                     <td><?= $cls["nama_cluster"]; ?></td>
+                                                    <td><?= $cls["nama_pc"]; ?></td>
                                                     <?php foreach ($atribut as $row) : ?>
                                                         <td class="text-center">
                                                             <?php
@@ -114,7 +126,7 @@ require_once '../partials/header.php';
                         <div class="col">
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title">Nilai Data PC Editing</h3>
+                                    <h3 class="card-title"><i class="nav-icon fas fa-table"></i>&nbsp; Nilai Data PC Editing</h3>
                                 </div>
                                 <div class="card-body table-responsive">
                                     <table id="example3" class="table table-bordered table-hover">

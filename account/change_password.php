@@ -6,83 +6,27 @@ if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
     exit;
 }
 
-if (isset($_GET["id_pc"]) && is_numeric($_GET["id_pc"])) {
-    $id_pc = $_GET["id_pc"];
-} else {
-    header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
-    exit;
-}
-
-$nama_pc = query("SELECT * FROM nama_pc WHERE id_pc = $id_pc");
-
-if (empty($nama_pc)) {
-    header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
-    exit;
-}
-
-$nama_pc = $nama_pc[0];
+$id = $_SESSION["id"];
+$user = query("SELECT * FROM users WHERE id = $id")[0];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $result = editPC($_POST);
+    $result = changePassword($_POST);
     if ($result > 0) {
-        echo json_encode(["status" => "success", "message" => "Data Successfully Changed"]);
+        echo json_encode(["status" => "success", "message" => "Password Changed Successfully Please Login Again"]);
     } elseif ($result == -1) {
-        echo json_encode(["status" => "error", "message" => "Attribute Name Already Exists"]);
+        echo json_encode(["status" => "error", "message" => "Confirm Password Invalid"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Data Failed to Change"]);
+        echo json_encode(["status" => "error", "message" => "Password Change Failed"]);
     }
     exit;
 }
 
+$title = "Change Password - {$user['nama']}";
+require_once '../partials/header.php';
 ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit PC - <?= $nama_pc["nama_pc"]; ?></title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-    <style>
-        .overlay {
-            position: fixed;
-            /* penting: supaya menempel di layar */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* tengah secara vertikal */
-            align-items: center;
-            /* tengah secara horizontal */
-        }
-    </style>
-</head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="overlay-wrapper" id="pageLoader">
-        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Processing...</div>
-        </div>
-    </div>
+    <?php include '../partials/overlay.php'; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -100,15 +44,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Edit PC Editing</h1>
+                            <h1 class="m-0">Change Password</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item">Master Data</li>
-                                <li class="breadcrumb-item">Data PC Editing</li>
-                                <li class="breadcrumb-item">Edit PC Editing</li>
-                                <li class="breadcrumb-item active"><?= $nama_pc["nama_pc"]; ?></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
+                                <li class="breadcrumb-item">Account</li>
+                                <li class="breadcrumb-item">Change Password</li>
+                                <li class="breadcrumb-item active"><?= htmlspecialchars($user["nama"]); ?></li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -124,23 +67,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- left column -->
                         <div class="col-md-12">
                             <!-- jquery validation -->
-                            <div class="card card-success">
+                            <div class="card card-danger">
                                 <div class="card-header">
-                                    <h3 class="card-title"><?= $nama_pc["nama_pc"]; ?></h3>
+                                    <h3 class="card-title">Change Password</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
-                                    <input type="hidden" name="id_pc" value="<?= $nama_pc["id_pc"]; ?>">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($user["id"]); ?>">
                                     <div class="card-body">
                                         <div class="form-group col-md-5">
-                                            <label for="nama_pc">Nama PC:</label>
-                                            <input type="text" name="nama_pc" class="form-control" id="nama_pc" placeholder="Nama PC" value="<?= $nama_pc["nama_pc"]; ?>">
+                                            <label for="password">Password:</label>
+                                            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label for="password2">Confirm Password:</label>
+                                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm Password">
                                         </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-solid fa-check"></i> Save Change</button>
+                                        <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-solid fa-check"></i> Save Changes</button>
                                     </div>
                                 </form>
                             </div>
@@ -167,42 +114,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <?php require_once '../partials/scripts.php'; ?>
 
-    <!-- jQuery -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- jquery-validation -->
-    <script src="../assets/plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-    <!-- DarkMode -->
-    <script src="../assets/dist/js/darkmode.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.min.js"></script>
-    <!-- Sidebar JS -->
-    <script src="../assets/js/sidebar.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
     <script>
         $(function() {
             // Inisialisasi validasi jQuery
             $('#quickForm').validate({
                 rules: {
-                    id_pc: {
+                    password: {
                         required: true
                     },
-                    nama_pc: {
+                    password2: {
                         required: true
                     }
                 },
                 messages: {
-                    id_pc: {
-                        required: "Please enter an ID PC"
+                    password: {
+                        required: "Please enter an Password"
                     },
-                    nama_pc: {
-                        required: "Please enter a Nama PC"
+                    password2: {
+                        required: "Please enter a Confirm Password"
                     }
                 },
                 errorElement: 'span',
@@ -245,7 +177,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 text: res.message,
                                 icon: "success"
                             }).then(() => {
-                                window.location.href = '../nama_pc';
+                                window.location.href = '<?= base_url('logout') ?>';
                             });
                         } else {
                             Swal.fire('Error', res.message, 'error');

@@ -41,18 +41,18 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../home" class="brand-link">
-        <img src="../assets/dist/img/logo/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="<?= base_url('home') ?>" class="brand-link">
+        <img src="<?= base_url('assets/dist/img/logo/logo2.png') ?>" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="h6 ml-1">BERSAUDARA PRINT</span>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="../assets/dist/img/profile/<?= $user['avatar']; ?>" class="brand-image img-circle elevation-3" alt="User Image">
+                <img src="<?= base_url('assets/dist/img/profile/' . htmlspecialchars($user['avatar'])); ?>" class="brand-image img-circle elevation-3" alt="User Image">
             </div>
             <div class="info">
-                <a href="../home" class="d-block ml-1 h6"><span><?= $user["nama"]; ?></span></a>
+                <a href="<?= base_url('home') ?>" class="d-block ml-1 h6"><span><?= htmlspecialchars($user["nama"]); ?></span></a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -164,14 +164,18 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                 </li>
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">
-                    <a href="../laporan" class="nav-link">
+                    <a href="<?= base_url('laporan/hasil_perhitungan') ?>"
+                        class="nav-link <?= pathContains([
+                                            'laporan/hasil_perhitungan',
+                                            'laporan/detail'
+                                        ]) ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>Hasil Perhitungan</p>
                     </a>
                 </li>
                 <li class="nav-header">SETTINGS</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview <?= isModule('account') ? 'menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= isModule('account') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Account
@@ -180,13 +184,21 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="../profile" class="nav-link">
+                            <a href="<?= base_url('account/profile') ?>"
+                                class="nav-link
+                                <?= pathContains([
+                                    'account/profile'
+                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Profile</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../change_password" class="nav-link">
+                            <a href="<?= base_url('account/change_password') ?>"
+                                class="nav-link
+                                <?= pathContains([
+                                    'account/change_password'
+                                ]) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Change Password</p>
                             </a>

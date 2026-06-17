@@ -13,7 +13,7 @@
              <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
          </li>
          <li class="nav-item d-none d-sm-inline-block">
-             <a href="../home" class="nav-link">Home</a>
+             <a href="<?= base_url('home') ?>" class="nav-link">Home</a>
          </li>
      </ul>
 
@@ -32,10 +32,10 @@
          </li>
          <li class="nav-item dropdown user-menu">
              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                 <span><?php echo $_SESSION['username'] ?></span>
+                 <span><?= htmlspecialchars($_SESSION['username']); ?></span>
              </a>
              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                 <li class="user-footer"><a class="btn btn-default btn-flat float-right  btn-block" id="btnLogout" href="../logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
+                 <li class="user-footer"><a class="btn btn-default btn-flat float-right  btn-block" id="btnLogout" href="<?= base_url('logout') ?>"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
              </ul>
          </li>
      </ul>

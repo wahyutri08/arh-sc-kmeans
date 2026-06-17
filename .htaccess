@@ -18,7 +18,8 @@ RewriteRule ^nilaiData/edit_nilaipc/([0-9]+)$ nilaiData/edit_nilaipc.php?id_pc=$
 RewriteRule ^nilaiData/delete_nilaipc/([0-9]+)$ nilaiData/delete_nilaipc.php?id_pc=$1 [L,QSA]
 RewriteRule ^nilaiData/edit_nilaicluster/([0-9]+)$ nilaiData/edit_nilaicluster.php?id_cluster=$1 [L,QSA]
 RewriteRule ^nilaiData/delete_nilaicluster/([0-9]+)$ nilaiData/delete_nilaicluster.php?id_cluster=$1 [L,QSA]
-RewriteRule ^type_settings/member_bank/edit/([0-9]+)$ type_settings/member_bank/edit.php?id_member=$1 [L,QSA]
+RewriteRule ^laporan/detail/([0-9]+)$ laporan/detail.php?id=$1 [L,QSA]
+RewriteRule ^laporan/delete/([0-9]+)$ laporan/delete.php?id=$1 [L,QSA]
 RewriteRule ^type_settings/member_bank/delete/([0-9]+)$ type_settings/member_bank/delete.php?id_member=$1 [L,QSA]
 RewriteRule ^user_management/edit/([0-9]+)$ user_management/edit.php?id=$1 [L,QSA]
 RewriteRule ^user_management/delete/([0-9]+)$ user_management/delete.php?id=$1 [L,QSA]
@@ -27,11 +28,20 @@ RewriteRule ^myassets/delete/([0-9]+)$ myassets/delete.php?id_stock=$1 [L,QSA]
 RewriteRule ^myassets/history/([0-9]+)$ myassets/history.php?id_stock=$1 [L,QSA]
 
 # ======================================
+# Redirect .php ke tanpa .php
+# ======================================
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^(.+)\.php$ /arh-sc-kmeans/$1 [R=301,L]
+
+# Untuk Hosting
+# RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+
+# ======================================
 # Remove .php extension
 # ======================================
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php [L]
+RewriteRule ^(.+)$ $1.php [L]
 
 # ======================================
 # Redirect index.php

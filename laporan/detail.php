@@ -86,59 +86,23 @@ foreach ($range_harga_cluster as $cluster => $list_harga) {
     ];
 }
 
+function formatNilai($nilai)
+{
+    return rtrim(
+        rtrim(
+            number_format((float)$nilai, 3, '.', ''),
+            '0'
+        ),
+        '.'
+    );
+}
 
+$title = "Detail Hasil Proses Perhitungan";
+require_once '../partials/header.php';
 ?>
 
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detail Hasil Proses Perhitungan</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-    <style>
-        .overlay {
-            position: fixed;
-            /* penting: supaya menempel di layar */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* tengah secara vertikal */
-            align-items: center;
-            /* tengah secara horizontal */
-        }
-    </style>
-</head>
-
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="overlay-wrapper" id="pageLoader">
-        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Processing...</div>
-        </div>
-    </div>
+    <?php include '../partials/overlay.php'; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -161,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
                                 <li class="breadcrumb-item">Laporan</li>
                                 <li class="breadcrumb-item">Laporan Hasil Proses Perhitungan</li>
                                 <li class="breadcrumb-item active">Detail Hasil Proses Perhitungan</li>
@@ -181,29 +145,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <div class="card card-danger">
                                 <div class="card-header">
                                     <span class="fas fa-laptop"></span> &nbsp;INFORMASI
+                                    <div class="card-tools">
+                                        &nbsp;
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <table>
-                                        <tr>
-                                            <td>ID Laporan</td>
-                                            <td>: <?= $id_laporan ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nama User</td>
-                                            <td>: <?= $laporan[0]['nama'] ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Role</td>
-                                            <td>: <?= $laporan[0]['role'] ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jumlah Proses</td>
-                                            <td>: <?= $laporan[0]['jumlah_iterasi'] ?> Iterasi</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tanggal Laporan</td>
-                                            <td>: <?= $laporan[0]['tanggal_laporan'] ?></td>
-                                        </tr>
+                                <div class="card-body p-0">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>ID Laporan</td>
+                                                <td><?= $id_laporan ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama User</td>
+                                                <td><?= htmlspecialchars($laporan[0]['nama']); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Role</td>
+                                                <td><?= htmlspecialchars($laporan[0]['role']); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jumlah Proses</td>
+                                                <td><?= htmlspecialchars($laporan[0]['jumlah_iterasi']); ?> Iterasi</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tanggal Laporan</td>
+                                                <td><?= htmlspecialchars($laporan[0]['tanggal_laporan']); ?></td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -224,6 +196,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <table id="example1" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
+                                                <th class="text-center">Cluster</th>
                                                 <th class="text-center">Nama PC</th>
                                                 <?php
                                                 // Ambil atribut unik
@@ -236,7 +209,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 foreach ($atribut_unik as $nama_atribut) : ?>
                                                     <th class="text-center"><?= $nama_atribut; ?></th>
                                                 <?php endforeach; ?>
-                                                <th>Cluster</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -251,15 +224,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             // Display data
                                             foreach ($data_by_pc as $pc => $data) : ?>
                                                 <tr>
+                                                    <td class="text-center"><?= $data['cluster']; ?></td>
                                                     <td><?= $pc; ?></td>
                                                     <?php foreach ($atribut_unik as $atribut) : ?>
                                                         <td class="text-center">
                                                             <?= isset($data['atribut'][$atribut])
-                                                                ? number_format($data['atribut'][$atribut], 3)
+                                                                ? formatNilai($data['atribut'][$atribut])
                                                                 : '-' ?>
                                                         </td>
                                                     <?php endforeach; ?>
-                                                    <td><?= $data['cluster']; ?></td>
+
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -272,19 +246,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <div class="card card-primary">
                                 <div class="card-header">
                                     <h3 class="card-title"><span class="far fa-chart-bar"></span> &nbsp;DIAGRAM HASIL</h3>
+                                    <div class="card-tools">
+                                        &nbsp;
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="donutChart" style="height: 230px; min-height: 230px;"></canvas>
                                 </div>
-                            </div>
-
-                            <!-- Knob Hasil -->
-                            <div class="card">
+                                <hr>
+                                <!-- Knob Hasil -->
                                 <div class="card-body">
                                     <div class="row">
                                         <?php
                                         // Warna default (bisa ditambah lagi jika cluster > 6)
-                                        $warna_fg = ['#3c8dbc', '#f56954', '#f39c12', '#00a65a', '#605ca8', '#d81b60'];
+                                        $warna_fg = [
+                                            '#3c8dbc',
+                                            '#f56954',
+                                            '#f39c12',
+                                            '#00a65a',
+                                            '#605ca8',
+                                            '#d81b60',
+                                            '#17a2b8',
+                                            '#6610f2',
+                                            '#20c997',
+                                            '#fd7e14',
+                                            '#6f42c1',
+                                            '#e83e8c',
+                                            '#28a745',
+                                            '#dc3545',
+                                            '#007bff',
+                                            '#ffc107',
+                                        ];
                                         $width = [90, 120, 90, 90, 90, 90]; // Urutan ukuran
 
                                         $i = 0;
@@ -304,8 +299,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         endforeach; ?>
                                     </div>
                                 </div>
-                            </div>
+                                <!-- <div class="card">
 
+                                </div> -->
+                            </div>
                             <!-- Penjelasan Jurusan -->
                             <div class="card card-warning">
                                 <div class="card-header">
@@ -387,42 +384,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <?php require_once '../partials/scripts.php'; ?>
 
-    <!-- jQuery -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/jszip/jszip.min.js"></script>
-    <script src="../assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="../assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- DarkMode -->
-    <script src="../assets/dist/js/darkmode.js"></script>
-    <!-- ChartJS -->
-    <script src="../assets/plugins/chart.js/Chart.min.js"></script>
-    <!-- jQuery Knob -->
-    <script src="../assets/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- Sparkline -->
-    <script src="../assets/plugins/sparklines/sparkline.js"></script>
-    <!-- jquery-validation -->
-    <script src="../assets/plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.min.js"></script>
-    <!-- Sidebar JS -->
-    <script src="../assets/js/sidebar.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
     <script>
         $(function() {
