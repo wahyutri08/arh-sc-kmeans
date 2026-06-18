@@ -2,7 +2,7 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
@@ -62,7 +62,7 @@ require_once '../partials/header.php';
                                                 <?php foreach ($atribut as $atr) : ?>
                                                     <th class="text-center"><?= $atr["nama_atribut"]; ?></th>
                                                 <?php endforeach ?>
-                                                <th></th>
+                                                <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -2,28 +2,28 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
 if ($_SESSION['role'] !== 'Admin') {
     header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
+    http_response_code(404);
     exit;
 }
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
-    $id = $_GET["id"];
+    $id = (int)$_GET["id"];
 } else {
     header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
+    http_response_code(404);
     exit;
 }
 
 $users = query("SELECT * FROM users WHERE id = $id");
 if (empty($users)) {
     header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
+    http_response_code(404);
     exit;
 }
 
@@ -65,54 +65,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     exit;
 }
+
+$title = "Edit User - {$users['nama']}";
+require_once '../partials/header.php';
 ?>
 
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit User - <?= $users["nama"]; ?></title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-    <style>
-        .overlay {
-            position: fixed;
-            /* penting: supaya menempel di layar */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* tengah secara vertikal */
-            align-items: center;
-            /* tengah secara horizontal */
-        }
-    </style>
-</head>
-
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="overlay-wrapper" id="pageLoader">
-        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Processing...</div>
-        </div>
-    </div>
+    <?php include '../partials/overlay.php'; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -134,8 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item">Settings</li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
                                 <li class="breadcrumb-item">User Management</li>
                                 <li class="breadcrumb-item">Edit</li>
                                 <li class="breadcrumb-item active"><?= $users["nama"]; ?></li>
@@ -156,25 +114,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- jquery validation -->
                             <div class="card card-warning">
                                 <div class="card-header">
-                                    <span class="nav-icon fas fa-user"></span> &nbsp;<?= $users["nama"]; ?>
+                                    <span class="nav-icon fas fa-user"></span> &nbsp;<?= htmlspecialchars($users["nama"]); ?>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
-                                    <input type="hidden" name="id" value="<?= $users["id"]; ?>">
-                                    <input type="hidden" name="avatarLama" value="<?= $users["avatar"]; ?>">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($users["id"]); ?>">
+                                    <input type="hidden" name="avatarLama" value="<?= htmlspecialchars($users["avatar"]); ?>">
                                     <div class="card-body">
                                         <div class="form-group col-md-5">
                                             <label for="username">Username:</label>
-                                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="<?= $users["username"]; ?>">
+                                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" value="<?= htmlspecialchars($users["username"]); ?>">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="nama">Nama:</label>
-                                            <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama" value="<?= $users["nama"]; ?>">
+                                            <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama" value="<?= htmlspecialchars($users["nama"]); ?>">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="email">Email:</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="<?= $users["email"]; ?>">
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="<?= htmlspecialchars($users["email"]); ?>">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="password">Password:</label>
@@ -187,14 +145,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="form-group col-md-5">
                                             <label>Role <span class="text-danger">*</span></label>
                                             <select class="custom-select form-control" id="role" name="role">
-                                                <option value="Admin" <?= ($users["role"] == "Admin") ? "selected" : "" ?>>Admin</option>
+                                                <option value="Admin" <?= (htmlspecialchars($users["role"]) == "Admin") ? "selected" : "" ?>>Admin</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label>Status <span class="text-danger">*</span></label>
                                             <select class="custom-select form-control" id="status" name="status">
-                                                <option value="Aktif" <?= ($users["status"] == "Aktif") ? "selected" : "" ?>>Aktif</option>
-                                                <option value="Tidak Aktif" <?= ($users["status"] == "Tidak Aktif") ? "selected" : "" ?>>Tidak Aktif</option>
+                                                <option value="Aktif" <?= (htmlspecialchars($users["status"]) == "Aktif") ? "selected" : "" ?>>Aktif</option>
+                                                <option value="Tidak Aktif" <?= (htmlspecialchars($users["status"]) == "Tidak Aktif") ? "selected" : "" ?>>Tidak Aktif</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-5">
@@ -239,25 +197,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <?php require_once '../partials/scripts.php'; ?>
 
-    <!-- jQuery -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- jquery-validation -->
-    <script src="../assets/plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="../assets/plugins/jquery-validation/additional-methods.min.js"></script>
-    <!-- bs-custom-file-input -->
-    <script src="../assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-    <!-- DarkMode -->
-    <script src="../assets/dist/js/darkmode.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.min.js"></script>
-    <!-- Sidebar JS -->
-    <script src="../assets/js/sidebar.js"></script>
     <!-- jQuery Validation + AJAX Submit -->
     <script>
         $(function() {
@@ -354,7 +295,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 text: res.message,
                                 icon: "success"
                             }).then(() => {
-                                window.location.href = '../user_management';
+                                window.location.href = '<?= base_url('user_management/users') ?>';
                             });
                         } else {
                             Swal.fire('Error', res.message, 'error');

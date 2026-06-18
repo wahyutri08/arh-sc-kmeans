@@ -2,7 +2,7 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
@@ -10,7 +10,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     $id_laporan = $_GET["id"];
 } else {
     header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
+    http_response_code(404);
     exit;
 }
 
@@ -26,7 +26,7 @@ $laporan = query("SELECT
                 ON laporan.user_id = users.id WHERE laporan.id = $id_laporan");
 if (empty($laporan)) {
     header("HTTP/1.1 404 Not Found");
-    include("../errors/404.html");
+    http_response_code(404);
     exit;
 }
 

@@ -2,63 +2,18 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
 $users = query("SELECT * FROM users");
 
+$title = "User Management";
+require_once '../partials/header.php';
 ?>
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Management</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/dist/img/logo/logo2.png">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-    <style>
-        .overlay {
-            position: fixed;
-            /* penting: supaya menempel di layar */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* tengah secara vertikal */
-            align-items: center;
-            /* tengah secara horizontal */
-        }
-    </style>
-</head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="overlay-wrapper" id="pageLoader">
-        <div class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-            <div class="text-bold pt-2">Processing...</div>
-        </div>
-    </div>
+    <?php include '../partials/overlay.php'; ?>
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -80,9 +35,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item">Settings</li>
-                                <li class="breadcrumb-item active">User Management</li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
+                                <li class="breadcrumb-item">User Management</li>
+                                <li class="breadcrumb-item active">Users</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -98,7 +53,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col">
                             <div class="card card-outline card-warning">
                                 <div class="card-header">
-                                    <h3 class="card-title"><a href="../register" class="btn btn-sm btn-block bg-gradient-warning"><i class="fas fa-plus"></i> Tambah Data</a></h3>
+                                    <h3 class="card-title"><a href="<?= base_url('user_management/add_user') ?>" class="btn btn-sm btn-block bg-gradient-warning"><i class="fas fa-plus"></i> Tambah Data</a></h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body table-responsive">
@@ -111,18 +66,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <th class="text-center">Email</th>
                                                 <th class="text-center">Role</th>
                                                 <th class="text-center">Status</th>
-                                                <th></th>
+                                                <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($users as $i => $row) : ?>
                                                 <tr>
                                                     <td class="text-center"><?= $i + 1; ?></td>
-                                                    <td class="text-center"><?= $row["username"]; ?></td>
-                                                    <td class="text-center"><?= $row["nama"]; ?></td>
-                                                    <td class="text-center"><?= $row["email"]; ?></td>
-                                                    <td class="text-center"><?= $row["role"]; ?></td>
-                                                    <?php if ($row["status"] == "Aktif") : ?>
+                                                    <td class="text-center"><?= htmlspecialchars($row["username"]); ?></td>
+                                                    <td class="text-center"><?= htmlspecialchars($row["nama"]); ?></td>
+                                                    <td class="text-center"><?= htmlspecialchars($row["email"]); ?></td>
+                                                    <td class="text-center"><?= htmlspecialchars($row["role"]); ?></td>
+                                                    <?php if (htmlspecialchars($row["status"]) == "Aktif") : ?>
                                                         <td class="text-center"><span class="badge bg-success">Active</span></td>
                                                     <?php else : ?>
                                                         <td class="text-center"><span class="badge bg-danger">Not active</span></td>
@@ -133,8 +88,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                                 Action
                                                             </button>
                                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                                <li><a class="dropdown-item" href="edit_users.php?id=<?= $row["id"]; ?>"><i class="fas fa-edit"></i> Edit</a></li>
-                                                                <li><a class="dropdown-item tombol-hapus" href="delete_users.php?id=<?= $row["id"]; ?>"><i class="far fa-trash-alt"></i> Delete</a></li>
+                                                                <li><a class="dropdown-item" href="<?= base_url('user_management/edit/' . $row['id']); ?>"><i class="fas fa-edit"></i> Edit</a></li>
+                                                                <li><a class="dropdown-item tombol-hapus" href="<?= base_url('user_management/delete/' . $row['id']); ?>"><i class="far fa-trash-alt"></i> Delete</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -162,33 +117,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <?php require_once '../partials/scripts.php'; ?>
 
-    <!-- jQuery -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="../assets/plugins/jszip/jszip.min.js"></script>
-    <script src="../assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="../assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="../assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- DarkMode -->
-    <script src="../assets/dist/js/darkmode.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <script src="../assets/plugins/jslogout/logoutsweetalert.js"></script>
-    <!-- Sidebar JS -->
-    <script src="../assets/js/sidebar.js"></script>
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -241,7 +171,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         icon: 'success',
                                         showConfirmButton: true,
                                     }).then(() => {
-                                        window.location.href = '../user_management';
+                                        window.location.href = '<?= base_url('user_management/users') ?>';
                                     });
                                 } else if (res.status === 'error') {
                                     Swal.fire('Error', 'Data Deletion Failed', 'error');

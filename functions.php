@@ -625,7 +625,7 @@ function logout()
     session_destroy();
 
     // Alihkan ke halaman login
-    header("Location: ../login"); // Sesuaikan dengan halaman login Anda
+    header("Location: " . base_url('auth/login')); // Sesuaikan dengan halaman login Anda
     exit;
 }
 

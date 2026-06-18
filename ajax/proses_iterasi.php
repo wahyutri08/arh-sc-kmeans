@@ -142,21 +142,21 @@ try {
     // Simpan hasil
     date_default_timezone_set('Asia/Jakarta');
 
-    $simpan = simpanhasilakhir(
-        $centroids,
-        $clusters,
-        $history,
-        $_SESSION['id'],
-        date('Y-m-d'),
-        $nama_pc,
-        $data,
-        $atribut,
-        $actualIterations
-    );
+    // $simpan = simpanhasilakhir(
+    //     $centroids,
+    //     $clusters,
+    //     $history,
+    //     $_SESSION['id'],
+    //     date('Y-m-d'),
+    //     $nama_pc,
+    //     $data,
+    //     $atribut,
+    //     $actualIterations
+    // );
 
-    if (!$simpan) {
-        throw new Exception('Gagal Menyimpan Hasil Clustering.');
-    }
+    // if (!$simpan) {
+    //     throw new Exception('Gagal Menyimpan Hasil Clustering.');
+    // }
 
 ?>
 
@@ -346,9 +346,16 @@ try {
     $html = trim(ob_get_clean());
 
     echo json_encode([
-        'status'    => true,
+        'status' => true,
         'iteration' => $actualIterations,
-        'html'      => $html
+        'html' => $html,
+
+        'data' => [
+            'centroids' => $centroids,
+            'clusters' => $clusters,
+            'history' => $history,
+            'actualIterations' => $actualIterations
+        ]
     ]);
 
     exit;

@@ -2,7 +2,7 @@
 session_start();
 include_once("auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 

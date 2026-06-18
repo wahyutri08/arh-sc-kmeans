@@ -2,7 +2,7 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
@@ -52,13 +52,14 @@ require_once '../partials/header.php';
                             <!-- jquery validation -->
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title">Proses Perhitungan</h3>
+                                    <h3 class="card-title"><i class="fas fa-microchip"></i>&nbsp; Proses Perhitungan</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="POST" action="" enctype="multipart/form-data" id="quickForm">
+                                    <input type="hidden" id="hasilJson" name="hasilJson">
                                     <div class="card-body">
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-3">
                                             <label for="iterasi">Masukkan Iterasi:</label>
                                             <input type="number"
                                                 name="iterasi"
@@ -70,7 +71,18 @@ require_once '../partials/header.php';
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-solid fa-cog"></i> Processing</button>
+                                        <button type="submit"
+                                            id="btnProcessing"
+                                            class="btn btn-sm btn-success">
+                                            <i class="fas fa-solid fa-cog"></i> Processing
+                                        </button>
+                                        &nbsp;
+                                        <button type="button"
+                                            id="btnSimpan"
+                                            class="btn btn-sm btn-warning"
+                                            disabled>
+                                            <i class="fas fa-save"></i> Simpan Hasil
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -234,6 +246,12 @@ require_once '../partials/header.php';
                             });
                             // Tampilkan hasil
                             $('#hasilIterasi').html(res.html);
+
+                            // Simpan hasil untuk tombol save
+                            $('#hasilJson').val(JSON.stringify(res.data));
+
+                            // Enable tombol simpan
+                            $('#btnSimpan').prop('disabled', false);
                             // Inisialisasi ulang DataTable
                             initDataTables();
                             Swal.fire({
@@ -263,6 +281,71 @@ require_once '../partials/header.php';
                     });
                     return false;
                 }
+            });
+            $('#btnSimpan').on('click', function() {
+                let hasil = $('#hasilJson').val();
+                if (hasil == '') {
+                    Swal.fire({
+                        icon: 'warning',
+                        confirmButtonColor: '#d33',
+                        title: 'Peringatan',
+                        text: 'Silakan Lakukan Processing Terlebih Dahulu'
+                    });
+                    return;
+                }
+                Swal.fire({
+                    title: 'Simpan Hasil?',
+                    text: 'Data Hasil Clustering Akan Disimpan',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Simpan'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menyimpan...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        $.ajax({
+                            url: '<?= base_url("ajax/simpan_hasil") ?>',
+                            type: 'POST',
+                            data: {
+                                hasil: hasil
+                            },
+                            dataType: 'json',
+                            success: function(res) {
+                                Swal.close();
+                                if (res.status) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil',
+                                        text: 'Hasil Clustering Berhasil Disimpan'
+                                    });
+                                    $('#btnSimpan').prop('disabled', true);
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal',
+                                        text: res.message
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.close();
+                                console.log(xhr.responseText);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Terjadi kesalahan server'
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>

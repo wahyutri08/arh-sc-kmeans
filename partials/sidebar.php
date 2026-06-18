@@ -206,13 +206,19 @@ $user = query("SELECT * FROM users WHERE id = $id")[0];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="../user_management" class="nav-link">
+                    <a href="<?= base_url('user_management/users') ?>"
+                        class="nav-link  
+                                <?= pathContains([
+                                    'user_management/users',
+                                    'user_management/add_user',
+                                    'user_management/edit'
+                                ]) ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-users"></i>
                         <p>User Management</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../logout" class="nav-link" id="btnLogout">
+                    <a href="<?= base_url('logout') ?>" class="nav-link" id="btnLogout">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>Logout</p>
                     </a>

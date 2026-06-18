@@ -2,11 +2,17 @@
 session_start();
 include_once("../auth_check.php");
 if (!isset($_SESSION["login"]) || $_SESSION["login"] !== true) {
-    header("Location: ../login");
+    header("Location: " . base_url('auth/login'));
     exit;
 }
 
-$id = $_GET["id"];
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+    $id = (int)$_GET["id"];
+} else {
+    header("HTTP/1.1 404 Not Found");
+    http_response_code(404);
+    exit;
+}
 
 if (deleteUsers($id) > 0) {
     echo json_encode(['status' => 'success']);
