@@ -5,7 +5,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     exit();
 }
 $db = mysqli_connect("localhost", "root", "", "dev-arh2");
-
+date_default_timezone_set('Asia/Jakarta');
 
 define("BASEURL", "http://localhost/arh-sc-kmeans/");
 

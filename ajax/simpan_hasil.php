@@ -118,7 +118,7 @@ try {
         $hasil['clusters'],
         $hasil['history'],
         $_SESSION['id'],
-        date('Y-m-d'),
+        date('Y-m-d H:i:s'),
         $nama_pc,
         $data,
         $atribut,
