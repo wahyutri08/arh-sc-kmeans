@@ -130,47 +130,57 @@ require_once '../partials/header.php';
         });
     </script>
     <script>
-        $(document).ready(function() {
-            $('.tombol-hapus').on('click', function(e) {
-                e.preventDefault();
-                const href = $(this).attr('href');
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Data Will Be Deleted",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.value) {
-                        $.ajax({
-                            url: href,
-                            type: 'GET',
-                            success: function(response) {
-                                let res = JSON.parse(response);
-                                if (res.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: 'Data Successfully Deleted',
-                                        icon: 'success',
-                                        showConfirmButton: true,
-                                    }).then(() => {
-                                        window.location.href = '<?= base_url('master/pc_editing') ?>';
-                                    });
-                                } else if (res.status === 'error') {
-                                    Swal.fire('Error', 'Data Deletion Failed', 'error');
-                                } else if (res.status === 'redirect') {
-                                    window.location.href = '<?= base_url('logout') ?>';
-                                }
-                            },
-                            error: function() {
-                                Swal.fire('Error', 'An Error Occurred on the Server', 'error');
+        $(document).on('click', '.tombol-hapus', function(e) {
+            e.preventDefault();
+            let href = $(this).attr('href');
+            Swal.fire({
+                title: 'Apa Anda Yakin?',
+                text: 'Data Akan Dihapus',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#pageLoader').show();
+                    $.ajax({
+                        url: href,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: 'Data Berhasil Dihapus'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else if (res.status === 'redirect') {
+                                window.location.href = '<?= base_url("auth/login") ?>';
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: res.message || 'Data Gagal Dihapus'
+                                });
                             }
-                        });
-                    }
-                });
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Server Error',
+                                text: 'Terjadi Kesalahan Pada Server'
+                            });
+                        },
+                        complete: function() {
+                            $('#pageLoader').hide();
+                        }
+                    });
+                }
             });
         });
     </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2026 at 09:20 PM
+-- Generation Time: Jun 19, 2026 at 06:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -278,22 +278,6 @@ CREATE TABLE `nilai_cluster` (
   `id_atribut` int(11) NOT NULL,
   `nilai` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `nilai_cluster`
---
-
-INSERT INTO `nilai_cluster` (`id_nilai_cluster`, `id_cluster`, `id_pc`, `id_atribut`, `nilai`) VALUES
-(251, 4, 6, 1, 10369),
-(252, 4, 6, 2, 16),
-(253, 4, 6, 3, 0.52),
-(254, 4, 6, 4, 256),
-(255, 4, 6, 5, 10.4),
-(256, 4, 6, 6, 2),
-(257, 4, 6, 7, 500),
-(258, 4, 6, 8, 60),
-(259, 4, 6, 9, 3),
-(260, 4, 6, 10, 4.55);
 
 -- --------------------------------------------------------
 
@@ -1852,7 +1836,7 @@ ALTER TABLE `laporan_hasil_akhir_atribut`
 -- AUTO_INCREMENT for table `nama_pc`
 --
 ALTER TABLE `nama_pc`
-  MODIFY `id_pc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `id_pc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT for table `nilai_cluster`
@@ -1864,13 +1848,13 @@ ALTER TABLE `nilai_cluster`
 -- AUTO_INCREMENT for table `nilai_pc`
 --
 ALTER TABLE `nilai_pc`
-  MODIFY `id_nilai_pc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1444;
+  MODIFY `id_nilai_pc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1465;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables
@@ -1898,6 +1882,8 @@ ALTER TABLE `laporan_hasil_akhir_atribut`
 -- Constraints for table `nilai_cluster`
 --
 ALTER TABLE `nilai_cluster`
+  ADD CONSTRAINT `fk_idatribut_nilaicluster` FOREIGN KEY (`id_atribut`) REFERENCES `atribut` (`id_atribut`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_idcluster_nilaicluster` FOREIGN KEY (`id_cluster`) REFERENCES `cluster` (`id_cluster`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_idpc_nilaicluster` FOREIGN KEY (`id_pc`) REFERENCES `nama_pc` (`id_pc`) ON UPDATE CASCADE;
 
 --
