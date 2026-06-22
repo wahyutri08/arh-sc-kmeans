@@ -301,8 +301,9 @@ require_once '../partials/header.php';
             $.ajax({
                 url: "<?= base_url('nilaiData/get_cluster_tujuan') ?>",
                 type: "POST",
-                success: function(response) {
-                    let res = JSON.parse(response);
+                dataType: "json",
+                success: function(res) {
+                    console.log(res);
                     if (res.status == 'redirect') {
                         window.location.href = "<?= base_url('logout') ?>";
                         return;
@@ -329,12 +330,12 @@ require_once '../partials/header.php';
                             $.ajax({
                                 url: "<?= base_url('nilaiData/add_to_cluster') ?>",
                                 type: "POST",
+                                dataType: "json",
                                 data: {
                                     id_pc: id_pc,
                                     id_cluster: res.id_cluster
                                 },
-                                success: function(r) {
-                                    let hasil = JSON.parse(r);
+                                success: function(hasil) {
                                     if (hasil.status == 'redirect') {
                                         window.location.href = "<?= base_url('logout') ?>";
                                         return;
@@ -354,9 +355,26 @@ require_once '../partials/header.php';
                                             text: hasil.message
                                         });
                                     }
+                                },
+                                error: function(xhr) {
+                                    console.log(xhr.responseText);
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Terjadi kesalahan pada server'
+                                    });
                                 }
                             });
                         }
+                    });
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Gagal mengambil data cluster tujuan'
                     });
                 }
             });
