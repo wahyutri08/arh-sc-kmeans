@@ -67,7 +67,6 @@ require_once '../partials/header.php';
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">ID</th>
                                                 <th class="text-center">Nama Cluster</th>
                                                 <th class="text-center">Nama PC</th>
                                                 <?php $atribut = query("SELECT *FROM atribut"); ?>
@@ -79,34 +78,37 @@ require_once '../partials/header.php';
                                         </thead>
                                         <tbody>
                                             <?php foreach ($cluster as $cls) : ?>
+                                                <?php
+                                                $cekCluster = query("
+                                                              SELECT 1 
+                                                              FROM nilai_cluster
+                                                              WHERE id_cluster = {$cls['id_cluster']}
+                                                              LIMIT 1");
+                                                ?>
                                                 <tr>
-                                                    <td class="text-center"><?= $cls["id_cluster"]; ?></td>
-                                                    <td><?= $cls["nama_cluster"]; ?></td>
+                                                    <td class="text-center"><?= $cls["nama_cluster"]; ?></td>
                                                     <td><?= $cls["nama_pc"]; ?></td>
                                                     <?php foreach ($atribut as $row) : ?>
                                                         <td class="text-center">
                                                             <?php
-                                                            $nilaiCluster = query("SELECT * FROM nilai_cluster WHERE id_cluster = " . $cls['id_cluster'] . " AND id_atribut = " . $row['id_atribut']);
-                                                            if ($nilaiCluster) {
-                                                                echo $nilaiCluster[0]['nilai'];
-                                                            } else {
-                                                                echo " ";
-                                                            }
+                                                            $nilaiCluster = query("
+                                                                            SELECT nilai
+                                                                            FROM nilai_cluster
+                                                                            WHERE id_cluster = {$cls['id_cluster']}
+                                                                            AND id_atribut = {$row['id_atribut']}
+                                                                        ");
+                                                            echo $nilaiCluster ? $nilaiCluster[0]['nilai'] : '';
                                                             ?>
                                                         </td>
                                                     <?php endforeach; ?>
                                                     <td class="text-center">
-                                                        <div class="dropdown">
+                                                        <?php if ($cekCluster) : ?>
                                                             <button class="btn btn-danger btn-sm tombol-hapus"
                                                                 data-id="<?= $cls['id_cluster']; ?>"
                                                                 type="button">
                                                                 <i class="far fa-trash-alt"></i>
                                                             </button>
-                                                            <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                                <li><a class="dropdown-item" href="<?= base_url('nilaiData/edit_nilaicluster/' . $cls['id_cluster']) ?>"><i class="fas fa-edit"></i> Edit</a></li>
-                                                                <li><a class="dropdown-item tombol-hapus" href="<?= base_url('nilaiData/delete_nilaicluster/' . $cls['id_cluster']) ?>"><i class="far fa-trash-alt"></i> Delete</a></li>
-                                                            </ul> -->
-                                                        </div>
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -132,7 +134,6 @@ require_once '../partials/header.php';
                                     <table id="example3" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">ID</th>
                                                 <th class="text-center">Nama PC</th>
                                                 <?php $atribut = query("SELECT *FROM atribut"); ?>
                                                 <?php foreach ($atribut as $atr) : ?>
@@ -144,7 +145,6 @@ require_once '../partials/header.php';
                                         <tbody>
                                             <?php foreach ($nama_pc as $pc) : ?>
                                                 <tr>
-                                                    <td class="text-center"><?= $pc["id_pc"]; ?></td>
                                                     <td><?= $pc["nama_pc"]; ?></td>
                                                     <?php foreach ($atribut as $row) : ?>
                                                         <td class="text-center">
@@ -358,7 +358,6 @@ require_once '../partials/header.php';
                                 },
                                 error: function(xhr) {
                                     console.log(xhr.responseText);
-
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
